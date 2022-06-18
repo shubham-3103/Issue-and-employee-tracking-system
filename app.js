@@ -44,8 +44,21 @@ app.get('/',(req,res)=>{
 //     // res.render('handleForm');
 // })
 
+app.get('/admin.html',(req,res)=>{
+    const data2 = fs.readFileSync('admin.html');
+    res.send(data2.toString());
+    
+    console.log(req.query.username);
+})
 
+app.get('/engineer.html',(req,res)=>{
+    const data4 = fs.readFileSync('engineer.html');
+    res.send(data4.toString());
+    
+    // console.log(req.query.username);
+})
 
+// Go to user as well as query
 app.get('/createquery',(req,res,next)=>{
     // name1=req.body.fetch_query()
     var name = req.query.username;
@@ -54,44 +67,67 @@ app.get('/createquery',(req,res,next)=>{
     var email = req.query.email;
     var p_name = req.query.p_name;
     var description = req.query.description;
-    // let sql1 = `INSERT INTO user(name, mob, address, email) values ("${name}","${mob}","${address}","${email}")`;
+
+
     var sql = "INSERT INTO user(name, mob, address, email) VALUES ?"
     var sql2 = "INSERT INTO query(p_name, description) VALUES ?"
+    let user_id = `"select u_id from user where user.mob=${mob}"`;
+
+
+    var sql5 = `update query, user set query.u_id = ${user_id} where query.u_id IS NULL `
     var values=[
         [name,mob,address,email]
     ]
     var values2=[
         [p_name, description]
     ]
+   
     db.query(sql, [values], function(err,result){
         if (err) throw err;
         console.log('record inserted');
         res.redirect('/')
+        console.log(mob)
     })
     db.query(sql2, [values2], function(err,result){
         if (err) throw err;
         console.log('record inserted');
         res.redirect('/')
+        
     })
-    // let sql2 = 'insert into query(p_name, description) values (p_name, description)';
-    // let query2 = db.query(sql2, post, (err,result)=>{
-    //     if(err) throw err;
-    //     console.log(result);
-    //     res.send("added succesfully2")
-    // })
+    db.query(sql5, function(err,result){
+        if (err) throw err;
+        console.log('record updated');
+        res.redirect('/')
+    })
 })
 
 app.get('/createadmin',(req,res,next)=>{
     // name1=req.body.fetch_query()
-    var admin_name = req.query.admin_id;
-    var pass = req.query.pass;
+    var admin_name = req.query.adminname;
+    var pass = req.query.admin_pass;
     
-    // let sql1 = `INSERT INTO user(name, mob, address, email) values ("${name}","${mob}","${address}","${email}")`;
     var sql3 = "INSERT INTO admin(admin_id, pass) VALUES ?"
     var values=[
         [admin_name,pass]
     ]
     db.query(sql3, [values], function(err,result){
+        if (err) throw err;
+        console.log('record inserted');
+        res.redirect('/')
+    })
+})
+
+app.get('/createengineer',(req,res,next)=>{
+    // name1=req.body.fetch_query()
+    var engineer_name = req.query.engineer_name;
+    var engineer_email = req.query.engineer_email;
+    var engineer_mobile = req.query.engineer_mob;
+    
+    var sql4 = "INSERT INTO engineer(name, email, mob) VALUES ?"
+    var values=[
+        [engineer_name,engineer_email,engineer_mobile]
+    ]
+    db.query(sql4, [values], function(err,result){
         if (err) throw err;
         console.log('record inserted');
         res.redirect('/')
@@ -106,6 +142,7 @@ app.get('/query',(req,res)=>{
         res.send(results);
     })
 })
+
 
 app.listen(port, () => {
     console.log(`Server started on port 3000 ${port}`);
