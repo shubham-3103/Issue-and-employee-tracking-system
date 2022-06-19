@@ -44,6 +44,27 @@ app.get('/',(req,res)=>{
 //     // res.render('handleForm');
 // })
 
+db.query(`select user.u_id from user where user.mob=845123`, function (err, result,fields){
+    if (err) throw err;
+    var resultArray = Object.values(JSON.parse(JSON.stringify(result)))
+    let arr = (JSON.stringify(resultArray))   
+    const namekey = Object.values(arr) 
+    let i= 9;
+    let ans = []
+    let status=true;
+    while(status){
+        if(isNaN(parseInt(namekey[i]))==true){
+            status = false;
+        }
+        else{
+            ans.push((namekey[i]))
+        }
+        i = i+1;
+    }
+    let user_id = (parseInt(ans.join('')));
+    console.log(user_id)
+})
+
 app.get('/admin.html',(req,res)=>{
     const data2 = fs.readFileSync('admin.html');
     res.send(data2.toString());
@@ -58,6 +79,43 @@ app.get('/engineer.html',(req,res)=>{
     // console.log(req.query.username);
 })
 
+// let mob = 845123;
+// db.query(`select user.u_id from user where user.mob=${mob}`, function (err, result,fields){
+//     if (err) throw err;
+//     // Object.keys(result).forEach(function(key) {
+//     //     var row = result[key];
+//     //     console.log(row.name)
+//     // result=JSON.parse(JSON.stringify(result))
+//     // doStuffwithTheResult(results); 
+//     var resultArray = Object.values(JSON.parse(JSON.stringify(result)))
+//     // console.log(JSON.parse(JSON.stringify(resultArray)))
+//     // let arr = (JSON.parse(JSON.stringify(resultArray)))
+//     let arr = (JSON.stringify(resultArray))   
+//     const namekey = Object.values(arr) 
+//     let i= 9;
+//     let ans = []
+//     // ans.push(namekey[9])
+//     // console.log(isNaN(parseInt(namekey[9])))
+//     // console.log((parseInt(namekey[9])))
+//     let status=true;
+//     while(status){
+//         if(isNaN(parseInt(namekey[i]))==true){
+//             status = false;
+//         }
+//         else{
+//             ans.push((namekey[i]))
+//         }
+//         i = i+1;
+//     }
+//     let user_id = (parseInt(ans.join('')));
+//     // let concate = namekey['9'].concat(namekey['10'])
+//     // console.log(concate)
+//     // console.log((parseInt(namekey['11'])))
+// })
+// })
+
+
+
 // Go to user as well as query
 app.get('/createquery',(req,res,next)=>{
     // name1=req.body.fetch_query()
@@ -68,12 +126,37 @@ app.get('/createquery',(req,res,next)=>{
     var p_name = req.query.p_name;
     var description = req.query.description;
 
+    db.query(`select user.u_id from user where user.mob=${mob}`, function (err, result,fields){
+        if (err) throw err;
+        var resultArray = Object.values(JSON.parse(JSON.stringify(result)))
+        let arr = (JSON.stringify(resultArray))   
+        const namekey = Object.values(arr) 
+        let i= 9;
+        let ans = []
+        let status=true;
+        while(status){
+            if(isNaN(parseInt(namekey[i]))==true){
+                status = false;
+            }
+            else{
+                ans.push((namekey[i]))
+            }
+            i = i+1;
+        }
+        let user_id = (parseInt(ans.join('')));
 
     var sql = "INSERT INTO user(name, mob, address, email) VALUES ?"
     var sql2 = "INSERT INTO query(p_name, description) VALUES ?"
-    let user_id = `"select u_id from user where user.mob=${mob}"`;
-
-
+    // let user_id = `select u_id from user where user.mob=${mob}`;
+    // user_id
+//     db.query("select * from query", function (err, result){
+//         if (err) throw err;
+//         Object.keys(fields).forEach(function(key) {
+//             var field = fields[key];
+//             console.log(field)
+//     })
+// })
+    console.log(user_id)
     var sql5 = `update query, user set query.u_id = ${user_id} where query.u_id IS NULL `
     var values=[
         [name,mob,address,email]
@@ -99,6 +182,7 @@ app.get('/createquery',(req,res,next)=>{
         console.log('record updated');
         res.redirect('/')
     })
+})
 })
 
 app.get('/createadmin',(req,res,next)=>{
