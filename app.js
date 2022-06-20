@@ -25,8 +25,8 @@ app.get('/',(req,res)=>{
     res.send(data.toString());
 })
 
-app.get('/admin.html',(req,res)=>{
-    const data2 = fs.readFileSync('admin.html');
+app.get('/createadmin.html',(req,res)=>{
+    const data2 = fs.readFileSync('createadmin.html');
     res.send(data2.toString());
 })
 
