@@ -1,6 +1,8 @@
 const express = require('express');
 const mysql = require('mysql');
 const fs = require('fs');
+const path = require('path');
+const { query, response } = require('express');
 const port = 3000;
 const app = express();
 
@@ -43,9 +45,6 @@ app.get('/createquery',(req,res,next)=>{
     var email = req.query.email;
     var p_name = req.query.p_name;
     var description = req.query.description;
-
-    var sql = "INSERT INTO user(name, mob, address, email) VALUES ?"
-    var sql2 = "INSERT INTO query(p_name, description) VALUES ?"
    
     var values=[
         [name,mob,address,email]
@@ -54,12 +53,12 @@ app.get('/createquery',(req,res,next)=>{
         [p_name, description]
     ]
     
-    db.query(sql, [values], function(err,result){
+    db.query("INSERT INTO user(name, mob, address, email) VALUES ?", [values], function(err,result){
         if (err) throw err;
         console.log('record inserted');
         res.redirect('/')
     })
-    db.query(sql2, [values2], function(err,result){
+    db.query("INSERT INTO query(p_name, description) VALUES ?", [values2], function(err,result){
         if (err) throw err;
         console.log('record inserted');
     })
@@ -71,8 +70,8 @@ app.get('/createquery',(req,res,next)=>{
         results.forEach((v) => arr1 = Object.values(v));
 
         var user_id = arr1[0];
-        var sql5 = `update query, user set query.u_id = '${user_id}' where query.u_id IS NULL `
-        db.query(sql5, function(err,result){
+
+        db.query(`update query, user set query.u_id = '${user_id}' where query.u_id IS NULL `, function(err,result){
             if (err) throw err;
             console.log('record updated');
             return;
@@ -84,11 +83,10 @@ app.get('/createadmin',(req,res,next)=>{
     var admin_name = req.query.adminname;
     var pass = req.query.admin_pass;
     
-    var sql3 = "INSERT INTO admin(admin_id, pass) VALUES ?"
     var values=[
         [admin_name,pass]
     ]
-    db.query(sql3, [values], function(err,result){
+    db.query("INSERT INTO admin(admin_id, pass) VALUES ?", [values], function(err,result){
         if (err) throw err;
         console.log('record inserted');
         res.redirect('/')
@@ -100,25 +98,60 @@ app.get('/createengineer',(req,res,next)=>{
     var engineer_email = req.query.engineer_email;
     var engineer_mobile = req.query.engineer_mob;
     
-    var sql4 = "INSERT INTO engineer(name, email, mob) VALUES ?"
     var values=[
         [engineer_name,engineer_email,engineer_mobile]
     ]
-    db.query(sql4, [values], function(err,result){
+    db.query("INSERT INTO engineer(name, email, mob) VALUES ?", [values], function(err,result){
         if (err) throw err;
         console.log('record inserted');
         res.redirect('/')
     })
 })
 
+//useless
 app.get('/query',(req,res)=>{
-    let sql = 'select * from query';
-    db.query(sql,(err,results)=>{
+    db.query('select * from query',(err,results)=>{
         if (err) throw err;
         res.send(results);
+    }).catch(err =>{
+        console.log(err);
     })
 })
 
+// app.get('/adminpanel',function(req,res){
+    
+//     db.query('SELECT e_id, name from engineer where status = 0',(err,result)=>{
+//         if (err) throw err;
+//         res.send(fs.readFileSync('adminpanel.html').toString());
+//         // console.log(Object.values(JSON.parse(JSON.stringify(result))))
+//         var namearr = [];
+//         for( let i=0;i<(Object.values(JSON.parse(JSON.stringify(result))).length);i++){
+//             content = (Object.values(Object.values(JSON.parse(JSON.stringify(result)))[i])).toString()
+//             namearr.push(content);           
+//         }
+//         fs.writeFile('adminpanel.html', namearr.toString(),err => {
+//             if(err) throw err
+//         })
+//     })
+// })
+
+
+// app.get('/adminpanel',function(req,res){
+    
+//     db.query('SELECT e_id, name from engineer where status = 0',(err,result)=>{
+//         if (err) throw err;
+//         // res.send(fs.readFileSync('adminpanel.html').toString());
+//         // console.log(Object.values(JSON.parse(JSON.stringify(result))))
+//         var namearr = [];
+//         for( let i=0;i<(Object.values(JSON.parse(JSON.stringify(result))).length);i++){
+//             content = (Object.values(Object.values(JSON.parse(JSON.stringify(result)))[i])).toString()
+//             namearr.push(content);     
+//         }
+//         // fs.writeFile('adminpanel.html', namearr.toString(),err => {
+//             //             if(err) throw err
+//             //         })
+//     })
+// })
 
 app.listen(port, () => {
     console.log(`Server started on port 3000 ${port}`);
