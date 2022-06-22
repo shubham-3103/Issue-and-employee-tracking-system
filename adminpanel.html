@@ -23,14 +23,18 @@
         
                 <h2>Select e_id</h2>
         
-                <form>
+                <form action="/adminpanel" method="get" class="input">
                     <h2>Questions</h2>
                         <ul>
                             <% questions.forEach(function(question) { %>
                             <li>Number: <%= question.id %> <br/> Text: <%= question.quesStatement %></li>
                             <% }); %>
                         </ul>
+                
+                    <label for=""><b>Enter the date when his task was completed.</label><br></b>
+                    <input type="date" name="end_date" id="end_date" required><br>
                 </form>
+
             </div>
         </body>
         </html>

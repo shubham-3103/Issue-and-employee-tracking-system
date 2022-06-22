@@ -23,9 +23,28 @@ db.connect((err) => {
     console.log('Database connected');
 });  
 
+
 app.get('/',(req,res)=>{
     const data = fs.readFileSync('index.html');
     res.send(data.toString());
+})
+app.get('/usersignup',(req,res)=>{
+    const data3 = fs.readFileSync('usersignup.html');
+    res.send(data3.toString());
+
+    
+    var usersignup = req.query.usersignnup_name;
+    var userpass = req.query.usersignup_pass;
+    var values3 = [
+        [usersignup, userpass]
+    ]
+
+    db.query("INSERT INTO user(email, password) VALUES ?", [values3], function(err,result){
+        if (err) throw err;
+        console.log('record inserted');
+        res.redirect('/index.html')
+    })
+
 })
 
 app.get('/createadmin.html',(req,res)=>{
@@ -122,19 +141,36 @@ app.set('view engine', 'html');
 app.engine('html', require('ejs').renderFile);
 
 app.get('/adminpanel',function(req,res){
-    
-    db.query('SELECT e_id, name from engineer where status = 0',(err,result)=>{
-        if (err) throw err;
-        res.send(fs.readFileSync('adminpanel.html').toString());
-        // console.log(Object.values(JSON.parse(JSON.stringify(result))))
-        var namearr = [];
-        for( let i=0;i<(Object.values(JSON.parse(JSON.stringify(result))).length);i++){
-            content = (Object.values(Object.values(JSON.parse(JSON.stringify(result)))[i])).toString()
-            namearr.push(content);           
-        }
-        console.log(namearr)
-        res.render(__dirname + '/adminpanel.html',{questions:namearr});
+
+    // db.query('select p_name, description from query WHERE u_id=71',(err,result)=>{
+    //     if(err) throw err;
+    //     content1 = (Object.values(Object.values(JSON.parse(JSON.stringify(result)))[i])).toString()
+    //     console.log(content1)
+    // })
+    db.query('select p_name, description from query WHERE u_id=71',(err,result)=>{
+        if(err) throw err;
+        content1 = (JSON.stringify(result)).split(',')
+        console.log(content1)
+        res.redirect('/usersignup')
     })
+    
+    // db.query('',(err,result)=>{
+    //     var end_date = req.query.end_date;
+    //     var values=[
+    //         [end_date]
+    //     ]
+
+    //     if (err) throw err;
+    //     res.send(fs.readFileSync('adminpanel.html').toString());
+    //     // console.log(Object.values(JSON.parse(JSON.stringify(result))))
+    //     var namearr = [];
+    //     for( let i=0;i<(Object.values(JSON.parse(JSON.stringify(result))).length);i++){
+    //         content = (Object.values(Object.values(JSON.parse(JSON.stringify(result)))[i])).toString()
+    //         namearr.push(content);           
+    //     }
+    //     console.log(namearr)
+    //     res.render(__dirname + '/adminpanel.html',{questions:namearr});
+    // })
 })
 
 
