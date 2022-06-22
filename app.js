@@ -1,8 +1,9 @@
 const express = require('express');
 const mysql = require('mysql');
 const fs = require('fs');
-const path = require('path');
-const { query, response } = require('express');
+
+// const path = require('path');
+// const { query, response } = require('express');
 const port = 3000;
 const app = express();
 
@@ -117,23 +118,24 @@ app.get('/query',(req,res)=>{
         console.log(err);
     })
 })
+app.set('view engine', 'html');
+app.engine('html', require('ejs').renderFile);
 
-// app.get('/adminpanel',function(req,res){
+app.get('/adminpanel',function(req,res){
     
-//     db.query('SELECT e_id, name from engineer where status = 0',(err,result)=>{
-//         if (err) throw err;
-//         res.send(fs.readFileSync('adminpanel.html').toString());
-//         // console.log(Object.values(JSON.parse(JSON.stringify(result))))
-//         var namearr = [];
-//         for( let i=0;i<(Object.values(JSON.parse(JSON.stringify(result))).length);i++){
-//             content = (Object.values(Object.values(JSON.parse(JSON.stringify(result)))[i])).toString()
-//             namearr.push(content);           
-//         }
-//         fs.writeFile('adminpanel.html', namearr.toString(),err => {
-//             if(err) throw err
-//         })
-//     })
-// })
+    db.query('SELECT e_id, name from engineer where status = 0',(err,result)=>{
+        if (err) throw err;
+        res.send(fs.readFileSync('adminpanel.html').toString());
+        // console.log(Object.values(JSON.parse(JSON.stringify(result))))
+        var namearr = [];
+        for( let i=0;i<(Object.values(JSON.parse(JSON.stringify(result))).length);i++){
+            content = (Object.values(Object.values(JSON.parse(JSON.stringify(result)))[i])).toString()
+            namearr.push(content);           
+        }
+        console.log(namearr)
+        res.render(__dirname + '/adminpanel.html',{questions:namearr});
+    })
+})
 
 
 // app.get('/adminpanel',function(req,res){
@@ -147,7 +149,7 @@ app.get('/query',(req,res)=>{
 //             content = (Object.values(Object.values(JSON.parse(JSON.stringify(result)))[i])).toString()
 //             namearr.push(content);     
 //         }
-//         // fs.writeFile('adminpanel.html', namearr.toString(),err => {
+//         // fs.writeFile('admin panel.html', namearr.toString(),err => {
 //             //             if(err) throw err
 //             //         })
 //     })

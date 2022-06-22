@@ -23,14 +23,14 @@
         
                 <h2>Select e_id</h2>
         
-                <div class="dropdown">
-                <button class="dropbtn">Dropdown</button>
-                <div class="dropdown-content">
-                    <a href="#">na</a>
-                    <a href="#">Link 2</a>
-                    <a href="#">Link 3</a>
-                </div>
-                </div>
+                <form>
+                    <h2>Questions</h2>
+                        <ul>
+                            <% questions.forEach(function(question) { %>
+                            <li>Number: <%= question.id %> <br/> Text: <%= question.quesStatement %></li>
+                            <% }); %>
+                        </ul>
+                </form>
             </div>
         </body>
         </html>
