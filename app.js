@@ -22,7 +22,7 @@ db.connect((err) => {
     }
     console.log('Database connected');
 });  
-
+module.exports=db;
 
 app.get('/',(req,res)=>{
     const data = fs.readFileSync('index.html');
@@ -137,22 +137,22 @@ app.get('/query',(req,res)=>{
         console.log(err);
     })
 })
-app.set('view engine', 'html');
-app.engine('html', require('ejs').renderFile);
+// app.set('view engine', 'html');
+// app.engine('html', require('ejs').renderFile);
 
-app.get('/adminpanel',function(req,res){
+// app.get('/adminpanel',function(req,res){
 
     // db.query('select p_name, description from query WHERE u_id=71',(err,result)=>{
     //     if(err) throw err;
     //     content1 = (Object.values(Object.values(JSON.parse(JSON.stringify(result)))[i])).toString()
     //     console.log(content1)
     // })
-    db.query('select p_name, description from query WHERE u_id=71',(err,result)=>{
-        if(err) throw err;
-        content1 = (JSON.stringify(result)).split(',')
-        console.log(content1)
-        res.redirect('/usersignup')
-    })
+    // db.query('select p_name, description from query WHERE u_id=71',(err,result)=>{
+    //     if(err) throw err;
+    //     content1 = (JSON.stringify(result)).split(',')
+    //     console.log(content1)
+    //     res.redirect('/usersignup')
+    // })
     
     // db.query('',(err,result)=>{
     //     var end_date = req.query.end_date;
@@ -171,7 +171,7 @@ app.get('/adminpanel',function(req,res){
     //     console.log(namearr)
     //     res.render(__dirname + '/adminpanel.html',{questions:namearr});
     // })
-})
+// })
 
 
 // app.get('/adminpanel',function(req,res){
