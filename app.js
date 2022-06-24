@@ -1,6 +1,8 @@
 const express = require('express');
 const mysql = require('mysql');
 const fs = require('fs');
+const cors = require('cors')
+const dotenv = require('dotenv');
 
 // const path = require('path');
 // const { query, response } = require('express');
@@ -22,7 +24,6 @@ db.connect((err) => {
     }
     console.log('Database connected');
 });  
-module.exports=db;
 
 app.get('/',(req,res)=>{
     const data = fs.readFileSync('index.html');
@@ -161,7 +162,7 @@ app.get('/query',(req,res)=>{
     //     ]
 
     //     if (err) throw err;
-    //     res.send(fs.readFileSync('adminpanel.html').toString());
+    //     res.send(fs.readFileSync('adminpanel.ejs').toString());
     //     // console.log(Object.values(JSON.parse(JSON.stringify(result))))
     //     var namearr = [];
     //     for( let i=0;i<(Object.values(JSON.parse(JSON.stringify(result))).length);i++){
@@ -169,7 +170,7 @@ app.get('/query',(req,res)=>{
     //         namearr.push(content);           
     //     }
     //     console.log(namearr)
-    //     res.render(__dirname + '/adminpanel.html',{questions:namearr});
+    //     res.render(__dirname + '/adminpanel.ejs',{questions:namearr});
     // })
 // })
 
@@ -178,7 +179,7 @@ app.get('/query',(req,res)=>{
     
 //     db.query('SELECT e_id, name from engineer where status = 0',(err,result)=>{
 //         if (err) throw err;
-//         // res.send(fs.readFileSync('adminpanel.html').toString());
+//         // res.send(fs.readFileSync('adminpanel.ejs').toString());
 //         // console.log(Object.values(JSON.parse(JSON.stringify(result))))
 //         var namearr = [];
 //         for( let i=0;i<(Object.values(JSON.parse(JSON.stringify(result))).length);i++){
@@ -190,6 +191,25 @@ app.get('/query',(req,res)=>{
 //             //         })
 //     })
 // })
+app.get('/adminpanel',function(req,res){
+    res.send(fs.readFileSync('adminpanel.ejs').toString())
+    app.set('view engine', 'ejs');
+    var shub
+    db.query('select e_id, name, email from engineer WHERE status=0', function(err,result){
+        if (err) throw err;
+        const q = Object.values(JSON.parse(JSON.stringify(result)));
+        q.forEach((v) => shub=Object.values(v));
+        console.log((shub))
+        res.send(shub.toString())
+        res.render('engineer',{action:'get',sampleData:shub})
+        if (!profile) {
+            return res.status(404).json({ error: "No Profile Found" });
+        }
+        else {
+            return res.json(profile);
+        }
+    })
+})
 
 app.listen(port, () => {
     console.log(`Server started on port 3000 ${port}`);
