@@ -3,6 +3,7 @@ const mysql = require('mysql');
 const fs = require('fs');
 const cors = require('cors')
 const dotenv = require('dotenv');
+const path = require('path');
 
 // const path = require('path');
 // const { query, response } = require('express');
@@ -191,9 +192,10 @@ app.get('/query',(req,res)=>{
 //             //         })
 //     })
 // })
-app.get('/adminpanel',function(req,res){
-    res.send(fs.readFileSync('adminpanel.ejs').toString())
+app.use('/adminpanel',function(req,res){
+    // res.send(fs.readFileSync('adminpanel.ejs').toString())
     app.set('view engine', 'ejs');
+    // app.set('ejs', path.join(__dirname, 'adminpanel.ejs'));
     var shub
     db.query('select e_id, name, email from engineer WHERE status=0', function(err,result){
         if (err) throw err;
@@ -201,13 +203,7 @@ app.get('/adminpanel',function(req,res){
         q.forEach((v) => shub=Object.values(v));
         console.log((shub))
         res.send(shub.toString())
-        res.render('engineer',{action:'get',sampleData:shub})
-        if (!profile) {
-            return res.status(404).json({ error: "No Profile Found" });
-        }
-        else {
-            return res.json(profile);
-        }
+        // res.render('engineer',{action:'get',sampleData:shub})
     })
 })
 
