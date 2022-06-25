@@ -10,6 +10,10 @@ const path = require('path');
 const port = 3000;
 const app = express();
 
+app.set('view engine', 'ejs');
+const viewPath = path.join(__dirname)
+app.set('views',viewPath)
+
 // Crete Connection
 const db = mysql.createConnection({
     host     : 'localhost',
@@ -194,7 +198,9 @@ app.get('/query',(req,res)=>{
 // })
 app.use('/adminpanel',function(req,res){
     // res.send(fs.readFileSync('adminpanel.ejs').toString())
-    app.set('view engine', 'ejs');
+    
+    // app.set('view engine', 'ejs');
+    // app.set('views','./views')
     // app.set('ejs', path.join(__dirname, 'adminpanel.ejs'));
     var shub
     db.query('select e_id, name, email from engineer WHERE status=0', function(err,result){
@@ -202,8 +208,8 @@ app.use('/adminpanel',function(req,res){
         const q = Object.values(JSON.parse(JSON.stringify(result)));
         q.forEach((v) => shub=Object.values(v));
         console.log((shub))
-        res.send(shub.toString())
-        // res.render('engineer',{action:'get',sampleData:shub})
+        // res.send(shub.toString())
+        res.render('adminpanel')
     })
 })
 
