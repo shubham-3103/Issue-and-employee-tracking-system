@@ -4,6 +4,7 @@ const fs = require('fs');
 const cors = require('cors')
 const dotenv = require('dotenv');
 const path = require('path');
+const { Script } = require('vm');
 
 // const path = require('path');
 // const { query, response } = require('express');
@@ -196,21 +197,37 @@ app.get('/query',(req,res)=>{
 //             //         })
 //     })
 // })
-app.use('/adminpanel',function(req,res){
+app.use('/adminpanel', (req,res) => {
     // res.send(fs.readFileSync('adminpanel.ejs').toString())
     
     // app.set('view engine', 'ejs');
     // app.set('views','./views')
     // app.set('ejs', path.join(__dirname, 'adminpanel.ejs'));
-    var shub
+    var shub = []
     db.query('select e_id, name, email from engineer WHERE status=0', function(err,result){
         if (err) throw err;
         const q = Object.values(JSON.parse(JSON.stringify(result)));
-        q.forEach((v) => shub=Object.values(v));
-        console.log((shub))
+        q.forEach((v) => shub.push(Object.values(v)));
+        // console.log((shub))
         // res.send(shub.toString())
-        res.render('adminpanel')
+        // res.render('adminpanel',{name: 'SHubham'})
+        for (let i = 0; i < shub.length; i++) {
+        console.log(shub[i].toString());  
+        }
+        
+
+        res.render("adminpanel",{name1: shub });
+        
+        
     })
+    
+    // let engineer_id = shub[0].toString();
+    // let engineer_name = shub[1].toString();
+    // let engineer_email = shub[2].toString();
+    // for (let i = 0; i < shub.length; i++) {
+    //     console.log(shub[i].toString());  
+    // }
+    // res.render("adminpanel",{name1: 'shub'});
 })
 
 app.listen(port, () => {
