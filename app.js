@@ -135,101 +135,59 @@ app.get('/createengineer',(req,res,next)=>{
     })
 })
 
-//useless
-app.get('/query',(req,res)=>{
-    db.query('select * from query',(err,results)=>{
-        if (err) throw err;
-        res.send(results);
-    }).catch(err =>{
-        console.log(err);
-    })
-})
-// app.set('view engine', 'html');
-// app.engine('html', require('ejs').renderFile);
-
-// app.get('/adminpanel',function(req,res){
-
-    // db.query('select p_name, description from query WHERE u_id=71',(err,result)=>{
-    //     if(err) throw err;
-    //     content1 = (Object.values(Object.values(JSON.parse(JSON.stringify(result)))[i])).toString()
-    //     console.log(content1)
-    // })
-    // db.query('select p_name, description from query WHERE u_id=71',(err,result)=>{
-    //     if(err) throw err;
-    //     content1 = (JSON.stringify(result)).split(',')
-    //     console.log(content1)
-    //     res.redirect('/usersignup')
-    // })
-    
-    // db.query('',(err,result)=>{
-    //     var end_date = req.query.end_date;
-    //     var values=[
-    //         [end_date]
-    //     ]
-
-    //     if (err) throw err;
-    //     res.send(fs.readFileSync('adminpanel.ejs').toString());
-    //     // console.log(Object.values(JSON.parse(JSON.stringify(result))))
-    //     var namearr = [];
-    //     for( let i=0;i<(Object.values(JSON.parse(JSON.stringify(result))).length);i++){
-    //         content = (Object.values(Object.values(JSON.parse(JSON.stringify(result)))[i])).toString()
-    //         namearr.push(content);           
-    //     }
-    //     console.log(namearr)
-    //     res.render(__dirname + '/adminpanel.ejs',{questions:namearr});
-    // })
-// })
-
-
-// app.get('/adminpanel',function(req,res){
-    
-//     db.query('SELECT e_id, name from engineer where status = 0',(err,result)=>{
-//         if (err) throw err;
-//         // res.send(fs.readFileSync('adminpanel.ejs').toString());
-//         // console.log(Object.values(JSON.parse(JSON.stringify(result))))
-//         var namearr = [];
-//         for( let i=0;i<(Object.values(JSON.parse(JSON.stringify(result))).length);i++){
-//             content = (Object.values(Object.values(JSON.parse(JSON.stringify(result)))[i])).toString()
-//             namearr.push(content);     
-//         }
-//         // fs.writeFile('admin panel.html', namearr.toString(),err => {
-//             //             if(err) throw err
-//             //         })
-//     })
-// })
 app.use('/adminpanel', (req,res) => {
-    // res.send(fs.readFileSync('adminpanel.ejs').toString())
-    
-    // app.set('view engine', 'ejs');
-    // app.set('views','./views')
-    // app.set('ejs', path.join(__dirname, 'adminpanel.ejs'));
-    var shub = []
-    db.query('select e_id, name, email from engineer WHERE status=0', function(err,result){
+
+    // var e_info = []
+    // db.query('select e_id, name, email from engineer WHERE status=0', function(err,result){
+    //     if (err) throw err;
+    //     const q = Object.values(JSON.parse(JSON.stringify(result)));
+    //     q.forEach((v) => e_info.push(Object.values(v)));
+    //     for (let i = 0; i < e_info.length; i++) {
+    //     console.log(e_info[i].toString());  
+    //     }res.render("adminpanel",{name1: e_info });
+    // })
+
+    var e_info = []
+    db.query('select engineer.e_id, name, email, p_name, description, query.q_id, query.u_id from engineer, query where engineer.status = 0 and query.status = 0;', function(err,result){
         if (err) throw err;
         const q = Object.values(JSON.parse(JSON.stringify(result)));
-        q.forEach((v) => shub.push(Object.values(v)));
-        // console.log((shub))
-        // res.send(shub.toString())
-        // res.render('adminpanel',{name: 'SHubham'})
-        for (let i = 0; i < shub.length; i++) {
-        console.log(shub[i].toString());  
-        }
-        
+        q.forEach((v) => e_info.push(Object.values(v)));
+        for (let i = 0; i < e_info.length; i++) {
+        // console.log(e_info[i].toString());  
+        }res.render("adminpanel",{name1: e_info });
 
-        res.render("adminpanel",{name1: shub });
+        // var q_id = req.query.q_id
+        var e_id = req.query.e_id;
         
-        
+        db.query(`update query set query.e_id = '${e_id.split(',')[0]}', status = 1 where query.q_id = '${e_id.split(',')[5]}' `, function(err,result){
+            
+            if (err) throw err;
+            console.log('record updated')
+            res.redirect('/adminpanel.ejs');
+            return;
+        })
     })
-    
-    // let engineer_id = shub[0].toString();
-    // let engineer_name = shub[1].toString();
-    // let engineer_email = shub[2].toString();
-    // for (let i = 0; i < shub.length; i++) {
-    //     console.log(shub[i].toString());  
-    // }
-    // res.render("adminpanel",{name1: 'shub'});
+
+    // var q_info = []
+    // db.query('select p_name, description, q_id, u_id from query WHERE e_id IS NULL', function(err,result){
+    //     if (err) throw err;
+    //     const q = Object.values(JSON.parse(JSON.stringify(result)));
+    //     q.forEach((v) => q_info.push(Object.values(v)));
+    //     for (let i = 0; i < q_info.length; i++) {
+    //     console.log(q_info[i].toString());  
+    //     }res.render("adminpanel",{query1: q_info });
+    // })
 })
 
+//useless
+// app.get('/query',(req,res)=>{
+//     db.query('select * from query',(err,results)=>{
+//         if (err) throw err;
+//         res.send(results);
+//     }).catch(err =>{
+//         console.log(err);
+//     })
+// })
 app.listen(port, () => {
     console.log(`Server started on port 3000 ${port}`);
 });
