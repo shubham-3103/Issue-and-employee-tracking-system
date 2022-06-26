@@ -4,15 +4,18 @@
 <title>how to fetch data from database in node js and display in html</title>
 </head>
 <body>  
-<label for="e_id">Choose a Engineer:</label>
-  <select name="e_id" id="e_id">
-      <% for (var i =0; i < (name1.toString().length)/30 ;  i++ ) { %>
-        <option value="bronze">
+  
+  <form action="/adminpanel" method="get">
+    <label for="e_id">Choose:</label><br>
+    <label for="e_id">Engineer id, Enginner name, Engineer email, Product Name, Query id, User id:</label><br>
+    <select name="e_id" id="e_id">
+      <% for (var i =0; i < (name1.toString().length)/50 ;  i++ ) { %>
+        <option>
         <br/>  <%- name1[i] %> 
         <% } %>
-    </option>
-  </select>
-  <input type="date" name="end_date" id="end_date">
-<!-- <h2> My name is  <%- name1 %> </h2>  -->
+        </option>
+    </select><br>
+    <button type="submit">Submit</button>
+  </form>
 </body>
 </html>
