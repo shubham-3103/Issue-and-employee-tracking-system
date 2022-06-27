@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>how to fetch data from database in node js and display in html</title>
+</head>
+<body>  
+  
+  <form action="/querysolve" method="get">
+    <label for="e_id">Choose:</label><br>
+    <label for="e_id">Query id, Product Name </label><br>
+    <select name="q_id" id="q_id">
+      <% for (var i =0; i < (qsolve.toString().length) ;  i++ ) { %>
+        <option>
+        <br/>  <%- qsolve[i] %> 
+        <% } %>
+        </option>
+    </select><br><br>
+    <label for="end_date">Choose End date of query</label><br>
+    <input type="date" name="end_date" id="end_date" required><br>
+    <button type="submit">Submit</button>
+  </form>
+</body>
+</html>
