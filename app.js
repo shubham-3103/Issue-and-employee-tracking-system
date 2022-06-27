@@ -5,6 +5,7 @@ const cors = require('cors')
 const dotenv = require('dotenv');
 const path = require('path');
 const { Script } = require('vm');
+const { setTimeout } = require('timers/promises');
 
 // const path = require('path');
 // const { query, response } = require('express');
@@ -106,7 +107,7 @@ app.get('/createquery',(req,res,next)=>{
     })
 })
 
-app.get('/createadmin',(req,res,next)=>{
+app.get('/createadmin',(req,res)=>{
     var admin_name = req.query.adminname;
     var pass = req.query.admin_pass;
     
@@ -136,58 +137,98 @@ app.get('/createengineer',(req,res,next)=>{
 })
 
 app.use('/adminpanel', (req,res) => {
-
-    // var e_info = []
-    // db.query('select e_id, name, email from engineer WHERE status=0', function(err,result){
-    //     if (err) throw err;
-    //     const q = Object.values(JSON.parse(JSON.stringify(result)));
-    //     q.forEach((v) => e_info.push(Object.values(v)));
-    //     for (let i = 0; i < e_info.length; i++) {
-    //     console.log(e_info[i].toString());  
-    //     }res.render("adminpanel",{name1: e_info });
-    // })
-
+    
     var e_info = []
-    db.query('select engineer.e_id, name, email, p_name, description, query.q_id, query.u_id from engineer, query where engineer.status = 0 and query.status = 0;', function(err,result){
+    db.query('select engineer.e_id, name, email, p_name, description, query.q_id, query.u_id from engineer, query where engineer.status = 0 and query.status = 0 and query.e_id IS NULL;', function(err,result){
         if (err) throw err;
         const q = Object.values(JSON.parse(JSON.stringify(result)));
         q.forEach((v) => e_info.push(Object.values(v)));
         for (let i = 0; i < e_info.length; i++) {
-        // console.log(e_info[i].toString());  
-        }res.render("adminpanel",{name1: e_info });
-
-        // var q_id = req.query.q_id
-        var e_id = req.query.e_id;
-        
-        db.query(`update query set query.e_id = '${e_id.split(',')[0]}', status = 1 where query.q_id = '${e_id.split(',')[5]}' `, function(err,result){
-            
+        }res.render("adminpanel",{name1: e_info });   
+    })   
+})
+app.use('/afteradminpanel', (req,res) => {
+    var e_id = req.query.e_id;     
+    console.log(e_id)   
+        db.query(`update query, engineer set query.e_id = '${e_id.split(',')[0]}' where query.q_id = '${e_id.split(',')[5]}' `, function(err,result){
             if (err) throw err;
             console.log('record updated')
-            res.redirect('/adminpanel.ejs');
-            return;
         })
-    })
-
-    // var q_info = []
-    // db.query('select p_name, description, q_id, u_id from query WHERE e_id IS NULL', function(err,result){
-    //     if (err) throw err;
-    //     const q = Object.values(JSON.parse(JSON.stringify(result)));
-    //     q.forEach((v) => q_info.push(Object.values(v)));
-    //     for (let i = 0; i < q_info.length; i++) {
-    //     console.log(q_info[i].toString());  
-    //     }res.render("adminpanel",{query1: q_info });
-    // })
+        db.query(`update engineer set status = 1 where e_id ='${e_id.split(',')[0]}' `,function(err,result){
+            if (err) throw err;
+            console.log('status set to 1')
+            return
+        }) 
+        res.redirect('/adminpanel')
 })
 
-//useless
-// app.get('/query',(req,res)=>{
-//     db.query('select * from query',(err,results)=>{
-//         if (err) throw err;
-//         res.send(results);
-//     }).catch(err =>{
-//         console.log(err);
-//     })
-// })
+app.get('/querysolve',(req,res)=>{
+    //show in dropdown
+    var q_solve = []
+    db.query('select query.q_id, p_name, description, e_id from query where query.status = 0', function(err,result){
+        if (err) throw err;
+        const q = Object.values(JSON.parse(JSON.stringify(result)));
+        q.forEach((v) => q_solve.push(Object.values(v)));
+        res.render("querysolve",{qsolve: q_solve });
+    })
+    // console.log(q_solve)
+    //set enddate and status of query
+    
+    // var query_enddate = req.query.end_date;
+    // var q_id = req.query.q_id;
+    // db.query(`update query set end_date = '${query_enddate}', status = 1 where q_id = ${q_id.split(',')[0]}`, function(err,result){
+    //     if (err) throw err;
+    //     console.log("date added")
+    //     console.log(query_enddate)
+    // })
+    // var e_id
+    // db.query(`select e_id from query where q_id=${q_id.split(',')[0]}`,function(err,result){
+    //     const q = Object.values(JSON.parse(JSON.stringify(result)));
+    //     q.forEach((v) => e_id= (Object.values(v)));
+        
+    //     db.query(`update engineer set status = 0 where e_id = ${e_id}`, function(err,result){
+    //     if (err) throw err;
+    //     console.log("date added")
+    //     console.log(query_enddate)
+    //     })
+        
+    // })
+    // res.redirect('/querysolve')
+    // return;
+
+    // var e_id = req.query.e_id
+    // console.log(e_id)
+    
+    //selecting engineering id
+    
+    // console.log(q_id.split(',')[0])
+    // db.query(`update engineer set status = 0 where e_id = ${e_id}`,(err,result)=>{
+    //     if(err) throw err;
+    //     console.log(e_id)
+    // })
+})
+app.get('/afterquerysolve',(req,res)=>{
+    
+    var query_enddate = req.query.end_date;
+    var q_id = req.query.q_id;
+    db.query(`update query set end_date = '${query_enddate}', status = 1 where q_id = ${q_id.split(',')[0]}`, function(err,result){
+        if (err) throw err;
+        console.log("date added")
+        console.log(query_enddate)
+    })
+    var e_id
+    db.query(`select e_id from query where q_id=${q_id.split(',')[0]}`,function(err,result){
+        const q = Object.values(JSON.parse(JSON.stringify(result)));
+        q.forEach((v) => e_id= (Object.values(v)));
+        
+        db.query(`update engineer set status = 0 where e_id = ${e_id}`, function(err,result){
+        if (err) throw err;
+        console.log("date added")
+        console.log(query_enddate)
+        })
+    })
+    res.redirect('/querysolve')
+})
 app.listen(port, () => {
     console.log(`Server started on port 3000 ${port}`);
 });
