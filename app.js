@@ -171,41 +171,6 @@ app.get('/querysolve',(req,res)=>{
         q.forEach((v) => q_solve.push(Object.values(v)));
         res.render("querysolve",{qsolve: q_solve });
     })
-    // console.log(q_solve)
-    //set enddate and status of query
-    
-    // var query_enddate = req.query.end_date;
-    // var q_id = req.query.q_id;
-    // db.query(`update query set end_date = '${query_enddate}', status = 1 where q_id = ${q_id.split(',')[0]}`, function(err,result){
-    //     if (err) throw err;
-    //     console.log("date added")
-    //     console.log(query_enddate)
-    // })
-    // var e_id
-    // db.query(`select e_id from query where q_id=${q_id.split(',')[0]}`,function(err,result){
-    //     const q = Object.values(JSON.parse(JSON.stringify(result)));
-    //     q.forEach((v) => e_id= (Object.values(v)));
-        
-    //     db.query(`update engineer set status = 0 where e_id = ${e_id}`, function(err,result){
-    //     if (err) throw err;
-    //     console.log("date added")
-    //     console.log(query_enddate)
-    //     })
-        
-    // })
-    // res.redirect('/querysolve')
-    // return;
-
-    // var e_id = req.query.e_id
-    // console.log(e_id)
-    
-    //selecting engineering id
-    
-    // console.log(q_id.split(',')[0])
-    // db.query(`update engineer set status = 0 where e_id = ${e_id}`,(err,result)=>{
-    //     if(err) throw err;
-    //     console.log(e_id)
-    // })
 })
 app.get('/afterquerysolve',(req,res)=>{
     
