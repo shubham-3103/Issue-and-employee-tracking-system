@@ -33,7 +33,7 @@ db.connect((err) => {
 });  
 
 app.get('/',(req,res)=>{
-    const data = fs.readFileSync('index.html');
+    const data = fs.readFileSync('addquery.html');
     res.send(data.toString());
 })
 app.get('/usersignup',(req,res)=>{
@@ -50,7 +50,7 @@ app.get('/usersignup',(req,res)=>{
     db.query("INSERT INTO user(email, password) VALUES ?", [values3], function(err,result){
         if (err) throw err;
         console.log('record inserted');
-        res.redirect('/index.html')
+        res.redirect('/addquery.html')
     })
 
 })
