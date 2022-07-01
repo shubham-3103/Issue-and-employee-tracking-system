@@ -39,21 +39,24 @@ app.get('/',(req,res)=>{
 app.get('/usersignup',(req,res)=>{
     const data3 = fs.readFileSync('usersignup.html');
     res.send(data3.toString());
-
     
     var usersignup = req.query.usersignnup_name;
     var userpass = req.query.usersignup_pass;
     var values3 = [
         [usersignup, userpass]
     ]
-
-    db.query("INSERT INTO user(email, password) VALUES ?", [values3], function(err,result){
-        if (err) throw err;
-        console.log('record inserted');
-        res.redirect('/addquery.html')
-    })
+    if(usersignup == undefined ){
+        console.log("add data in form")
+    }else{
+        db.query("INSERT INTO user(email, password) VALUES ?", [values3], function(err,result){
+            if (err) throw err;
+            console.log('record inserted');
+            res.redirect('/addquery.html')
+        })
+    }
 
 })
+
 
 app.get('/createadmin.html',(req,res)=>{
     const data2 = fs.readFileSync('createadmin.html');
