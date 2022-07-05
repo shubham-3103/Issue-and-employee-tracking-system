@@ -33,6 +33,35 @@
     padding-right: 2% ;
     padding-bottom: 2% ;
 }
+.footer{
+    display: flex;
+    flex-direction: row;
+    justify-content: space-around;
+    background-color: rgba(62, 61, 61, 0.922);
+    color: aliceblue;
+    padding: 3% 3% 3% 3%;
+    /* justify-content: center; */
+}
+.footerleft a {
+    text-decoration: none;
+    color: aliceblue;
+}
+.footerlast{
+    background-color: rgb(36, 36, 36);
+    color: aliceblue;
+    padding: 1%;
+    
+}
+.footersvg{
+    display: flex;
+    flex-direction: row;
+    justify-content: end;
+}
+.footerlast p{
+    font-family: 'Josefin Slab', serif;
+}
+
+
 @media only screen and (max-width: 991px){
     .p-6{
         padding-left: 0%;
