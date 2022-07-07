@@ -6,6 +6,9 @@ const dotenv = require('dotenv');
 const path = require('path');
 const { Script } = require('vm');
 const { setTimeout } = require('timers/promises');
+const { count } = require('console');
+const flash = require('express-flash');
+
 
 // const path = require('path');
 // const { query, response } = require('express');
@@ -24,6 +27,10 @@ const db = mysql.createConnection({
     database : 'issuenew'
   });
 
+  app.use(express.json());
+  app.use(express.urlencoded({ extended: true }));
+  app.use(express.static(path.join(__dirname)));
+
 //Connect
 db.connect((err) => {
     if(err){
@@ -33,29 +40,70 @@ db.connect((err) => {
 });  
 
 app.get('/',(req,res)=>{
-    const data = fs.readFileSync('addquery.html');
+    const data = fs.readFileSync(path.join(__dirname+'/index.html'));
     res.send(data.toString());
 })
 app.get('/usersignup',(req,res)=>{
-    const data3 = fs.readFileSync('usersignup.html');
+    const data3 = fs.readFileSync(path.join(__dirname+'/usersignup.html'));
     res.send(data3.toString());
-
-    var usersignup = req.query.usersignnup_name;
-    var userpass = req.query.usersignup_pass;
+    
+    // var usersignup = req.query.usersignnup_name;
+    // var userpass = req.query.usersignup_pass;
+    // var values3 = [
+    //     [usersignup, userpass]
+    // ]
+    // if(usersignup==undefined){
+    //     console.log("add query")
+    // }else{
+    // db.query("INSERT INTO userlogin(login_id, password) VALUES ?", [values3], function(err,result){
+    //     if (err) throw err;
+    //     console.log('record inserted');
+    //     res.redirect('/');
+        
+    // })
+    // return
+// }
+})
+app.get('/usersignuprun',(req,res)=>{
+    var usersignup = req.query.email;
+    var userpass = req.query.pass;
     var values3 = [
         [usersignup, userpass]
     ]
-    if(usersignup==undefined){
-        console.log("add query")
-    }else{
+    
+    // db.query(`select count(login_id) from userlogin where login_id='${usersignup}'`,function(err,result){
+    //     const results = Object.values(JSON.parse(JSON.stringify(result))[0]);
+    //     count = (results[0]);
+    // })
+    // console.log(count)
     db.query("INSERT INTO userlogin(login_id, password) VALUES ?", [values3], function(err,result){
-        if (err) throw err;
-        console.log('record inserted');
-        res.redirect('/');
+        if (err){ 
+            res.send('Email already exist, Please go back')
+        }
         
+        else{
+        console.log('record inserted');
+        res.redirect('/usersignin');}
     })
-    return
-}
+})
+
+app.get('/usersignin',(req,res)=>{
+    const data4 = fs.readFileSync('usersignin.html');
+    res.send(data4.toString());
+})
+app.get('/usersigninrun',(req,res)=>{
+    var signin_name = req.query.your_name;
+    var signin_pass = req.query.your_pass;
+
+    db.query(`select * from userlogin where login_id= '${signin_name}' and password = '${signin_pass}'` ,function(err,result){
+        if(err) throw err;
+        if(result.length>0){
+            req.session;
+            // req.session.signin_name = signin_name; 
+            res.redirect('/')
+        }
+    })
+    
 })
 
 app.get('/createadmin.html',(req,res)=>{
