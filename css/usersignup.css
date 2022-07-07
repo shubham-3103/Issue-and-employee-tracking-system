@@ -267,14 +267,29 @@ display-flex, .display-flex, .display-flex-center, .signup-content, .signin-cont
   
   .signup-image {
     margin-top: 45px; }
-  
+  .submit_button{
+    background-color: #fe9393;
+    color: #000000;
+    width: 30%;
+    /* align-content: center; */
+    text-align: center;
+    border-radius: 5%;
+    padding: 1.5%;
+
+  }
+  .change{
+    color: #000000;
+  }
   figure {
-    margin-bottom: 50px;
-    text-align: center; }
+    margin-bottom: 30px;
+    text-align: left; 
+    font-size: 20px;
+    color: #000000;
+  }
   
   .form-submit {
     display: inline-block;
-    background: #6dabe4;
+    background: #fe9393;
     color: #fff;
     border-bottom: none;
     width: auto;
@@ -291,12 +306,22 @@ display-flex, .display-flex, .display-flex-center, .signup-content, .signin-cont
   
   #signin {
     margin-top: 16px; }
-  
-  .signup-image-link {
-    font-size: 14px;
-    color: #222;
+  .signin-image-link{
+    font-size: 20px;
+    font-weight: bold;
+    color: #fe9393;
     display: block;
-    text-align: center; }
+    text-align: center; 
+    text-decoration: dotted;
+  }
+  .signup-image-link {
+    font-size: 25px;
+    font-weight: bold;
+    color: #fe9393;
+    display: block;
+    text-align: center; 
+    text-decoration: dotted;
+  }
   
   .term-service {
     font-size: 13px;

@@ -4,13 +4,50 @@
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <!-- <script src="js/first.js"></script> -->
-    <!-- <style src="css/first.css"></style> -->
-    <!-- <link rel="stylesheet" href="css/first.css"> -->
+    <link rel="stylesheet" href="./css/usersignup.css">
+    <link rel="stylesheet" href="fonts/material-icon/css/material-design-iconic-font.min.css">
+
     <title>Issue Tracking System</title>
 </head>
 <body>
-    <div class="container">
+
+    <div class="main">
+        <!-- Sign up form -->
+        <section class="signup">
+            <div class="container">
+                <div class="signup-content">
+                    <div class="signup-form">
+                        <h2 class="form-title">File Query</h2>
+                        <div class="container">
+                            <form action="/createquery" method="get" class="input" id="input">
+                                <input type="text" name="username" id="name" required placeholder="Name"><br>
+                                
+                                <input type="number" id="mobile" name="mobile" required placeholder="Mobile no."><br>
+                        
+                                <input type="text" id="address" name="address" required placeholder="Address"><br>
+                    
+                                <input type="email" id="email" name="email" required placeholder="Email"><br>
+                    
+                                <input type="text" id="p_name" name="p_name" required placeholder="Product name"><br>
+                    
+                                <input type="text" id="description" name="description" required placeholder="Description"><br>
+                                
+                                <button type="submit" class="submit_button" form="input" value="submit">Submit</button>
+                            </form>
+                            <br>
+                            <a href="createadmin.html">ADMIN PANEL</a>
+                        </div>
+                        
+                    </div>
+                    <div class="signup-image">
+                        <figure><img src="./image/signup-image.jpg" ></figure>     
+                    </div>
+                </div>
+            </div>
+        </section>
+    </div>
+
+    <!-- <div class="container">
         <form action="/createquery" method="get" class="input">
             <label>Name:</label><br>
             <input type="text" name="username" id="name" required><br>
@@ -32,7 +69,7 @@
             <input type="submit" class="submit_button" value="Submit">
         </form>
         <a href="createadmin.html">ADMIN PANEL</a>
-    </div>
+    </div> -->
     
 </body>
 </html>

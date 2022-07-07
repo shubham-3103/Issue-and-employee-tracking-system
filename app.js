@@ -100,7 +100,7 @@ app.get('/usersigninrun',(req,res)=>{
         if(result.length>0){
             req.session;
             // req.session.signin_name = signin_name; 
-            res.redirect('/')
+            res.redirect('/createquerypage')
         }
     })
     
@@ -115,7 +115,10 @@ app.get('/engineer.html',(req,res)=>{
     const data4 = fs.readFileSync('engineer.html');
     res.send(data4.toString());
 })
-
+app.get('/createquerypage',(req,res)=>{
+    const data4 = fs.readFileSync('addquery.html');
+    res.send(data4.toString());
+})
 // Go to user as well as query
 app.get('/createquery',(req,res,next)=>{
     var name = req.query.username;
