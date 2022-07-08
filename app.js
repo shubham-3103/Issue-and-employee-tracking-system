@@ -224,8 +224,10 @@ app.get('/adminpanel',(req,res)=>{
     
     db.query(`SELECT COUNT(q_id) as remquery from query where query.status = 0;`,function(err,result){
         if(err) throw err;
+        console.log(result)
         res.render("adminpanel",{adminsolve: result });        
     })
+    
     
     // db.query(`SELECT COUNT(e_id) from engineer`,function(err,result){
     //     if(err) throw err;
