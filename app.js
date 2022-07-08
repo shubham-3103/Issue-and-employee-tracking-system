@@ -116,8 +116,8 @@ app.get('/engineer.html',(req,res)=>{
     res.send(data4.toString());
 })
 app.get('/createquerypage',(req,res)=>{
-    const data4 = fs.readFileSync('addquery.html');
-    res.send(data4.toString());
+    const data5 = fs.readFileSync('addquery.html');
+    res.send(data5.toString());
 })
 // Go to user as well as query
 app.get('/createquery',(req,res,next)=>{
@@ -190,7 +190,24 @@ app.get('/createengineer',(req,res,next)=>{
     })
 })
 
-app.use('/adminpanel', (req,res) => {
+app.get('/adminsignin',(req,res)=>{
+    const data6 = fs.readFileSync('adminpanelsignin.html');
+    res.send(data6.toString());
+})
+app.use('/adminpanelrun', (req,res) => {
+    var admin_email = req.query.admin_email;
+    var admin_pass = req.query.admin_pass;
+    db.query(`select * from admin where admin_id='${admin_email}' and pass='${admin_pass}'`, function(err,result){
+        if(err) throw err;
+        if(result.length>0){
+            req.session;
+            res.redirect('/adminpanel')
+        }
+          
+    })   
+})
+//work of admin both given 2 function given below
+app.use('/assignengineer', (req,res) => {
     
     var e_info = []
     db.query('select engineer.e_id, name, email, p_name, description, query.q_id, query.u_id from engineer, query where engineer.status = 0 and query.status = 0 and query.e_id IS NULL;', function(err,result){
@@ -198,9 +215,39 @@ app.use('/adminpanel', (req,res) => {
         const q = Object.values(JSON.parse(JSON.stringify(result)));
         q.forEach((v) => e_info.push(Object.values(v)));
         for (let i = 0; i < e_info.length; i++) {
-        }res.render("adminpanel",{name1: e_info });   
+        }res.render("assignengineer",{name1: e_info });   
     })   
 })
+app.get('/adminpanel',(req,res)=>{
+    // const data6 = fs.readFileSync('adminpanel.ejs');
+    // res.send(data6.toString());
+    
+    db.query(`SELECT COUNT(q_id) as remquery from query where query.status = 0;`,function(err,result){
+        if(err) throw err;
+        res.render("adminpanel",{adminsolve: result });        
+    })
+    
+    // db.query(`SELECT COUNT(e_id) from engineer`,function(err,result){
+    //     if(err) throw err;
+    //     var q = Object.values(Object.values(JSON.parse(JSON.stringify(result)))[0]);
+    //     q=q[0]
+    //     console.log(q)
+    //     res.render("adminpanel",{totaleng: q });
+    // })
+     
+})
+
+// app.use('/adminpanel', (req,res) => {
+    
+//     var e_info = []
+//     db.query('select engineer.e_id, name, email, p_name, description, query.q_id, query.u_id from engineer, query where engineer.status = 0 and query.status = 0 and query.e_id IS NULL;', function(err,result){
+//         if (err) throw err;
+//         const q = Object.values(JSON.parse(JSON.stringify(result)));
+//         q.forEach((v) => e_info.push(Object.values(v)));
+//         for (let i = 0; i < e_info.length; i++) {
+//         }res.render("adminpanel",{name1: e_info });   
+//     })   
+// })
 app.use('/afteradminpanel', (req,res) => {
     var e_id = req.query.e_id;     
     console.log(e_id)   
