@@ -208,7 +208,6 @@ app.use('/adminpanelrun', (req,res) => {
 })
 //work of admin both given 2 function given below
 app.use('/assignengineer', (req,res) => {
-    
     var e_info = []
     db.query('select engineer.e_id, name, email, p_name, description, query.q_id, query.u_id from engineer, query where engineer.status = 0 and query.status = 0 and query.e_id IS NULL;', function(err,result){
         if (err) throw err;
@@ -221,13 +220,14 @@ app.use('/assignengineer', (req,res) => {
 app.get('/adminpanel',(req,res)=>{
     // const data6 = fs.readFileSync('adminpanel.ejs');
     // res.send(data6.toString());
-    
-    db.query(`SELECT COUNT(q_id) as remquery from query where query.status = 0;`,function(err,result){
+    // sessionStorage.setItem()
+    db.query(`select COUNT(q_id) as remquery from ( SELECT q_id FROM query where status = 0) A UNION ALL select Count(e_id) FROM (select e_id FROM engineer) B UNION ALL SELECT COUNT(e_id) from (SELECT e_id FROM engineer WHERE engineer.status = 0) C UNION ALL select COUNT(u_id) FROM (SELECT u_id from user) D;`,function(err,result){
+        
         if(err) throw err;
-        console.log(result)
-        res.render("adminpanel",{adminsolve: result });        
+        console.log(Object.values(result[0]))
+        res.render("adminpanel",{ adminsolve: { remquery: Object.values(result[0]), toteng: Object.values(result[1]), engfree: Object.values(result[2]), totuser: Object.values(result[3]) }});    
+        
     })
-    
     
     // db.query(`SELECT COUNT(e_id) from engineer`,function(err,result){
     //     if(err) throw err;
@@ -235,7 +235,8 @@ app.get('/adminpanel',(req,res)=>{
     //     q=q[0]
     //     console.log(q)
     //     res.render("adminpanel",{totaleng: q });
-    // })
+    // })    
+    
      
 })
 
