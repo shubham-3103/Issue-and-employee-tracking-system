@@ -131,31 +131,35 @@
             <div class="container-fluid pt-4 px-4">
                 <div class="bg-secondary text-center rounded p-4">
                     <div class="d-flex align-items-center justify-content-between mb-4">
-                        <h6 class="mb-0">Query Remaining</h6>
-                        <a href="">Show All</a>
+                        <h6 class="mb-0">Recent Remaining Query</h6>
                     </div>
                     <div class="table-responsive">
                         <table class="table text-start align-middle table-bordered table-hover mb-0">
                             <thead>
                                 <tr class="text-white">
-                                    <th scope="col"><input class="form-check-input" type="checkbox"></th>
-                                    <th scope="col">Name</th>
-                                    <th scope="col">Mobile</th>
-                                    <th scope="col">Address</th>
-                                    <th scope="col">Email</th>
+                                    
                                     <th scope="col">Product Name</th>
                                     <th scope="col">Description</th>
+                                    <th scope="col">Query Id</th>
+                                    <th scope="col">Engineer Id</th>
+                                    <th scope="col">User Id</th>
+                                    <th scope="col">Start Date</th>
+                                    <th scope="col">End Date</th>
+                                    <th scope="col">Status</th>
+                                    <th scope="col">Feedback</th>
                                 </tr>
                             </thead>
                             <tbody>
                                 <tr>
-                                    <td><input class="form-check-input" type="checkbox"></td>
-                                    <td></td>
-                                    <td></td>
-                                    <td></td>
-                                    <td></td>
-                                    <td></td>
-                                    <td></td>
+                                    <td class="text-danger"><%- adminsolve.querypname[0] %></td>
+                                    <td class="text-danger"><%- adminsolve.querydesc[0] %></td>
+                                    <td class="text-danger"><%- adminsolve.queryqid[0] %></td>
+                                    <td class="text-danger"><%- adminsolve.queryeid[0] %></td>
+                                    <td class="text-danger"><%- adminsolve.queryuid[0] %></td>
+                                    <td class="text-danger"><%- adminsolve.querystart[0] %></td>
+                                    <td class="text-danger"><%- adminsolve.queryend[0] %></td>
+                                    <td class="text-danger"><%- adminsolve.querystatus[0] %></td>
+                                    <td class="text-danger"><%- adminsolve.queryfeed[0] %></td>
                                 </tr>                          
                             </tbody>
                         </table>
@@ -167,13 +171,23 @@
 
             <!-- Widgets Start -->
             <div class="container-fluid pt-4 px-4">
-                <div class="row g-4">
-                    <div class="col-sm-12 col-md-6 col-xl-4">
-                        <div class="h-100 bg-secondary rounded p-4">
+                <div class="row g-4 " >
+                    <div class="col-sm-12 col-md-6 col-xl-4 ">
+                        <div class="h-100 bg-secondary rounded p-4 " >
                             <div class="d-flex align-items-center justify-content-between mb-2">
                                 <h6 class="mb-0">Messages</h6>
-                                <a href="">Show All</a>
+                                <div class="dropdown">
+                                    <button class="btn btn-danger dropdown-toggle " type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                      Select Time
+                                    </button>
+                                    <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+                                      <a class="dropdown-item" href="#">This Month</a>
+                                      <a class="dropdown-item" href="#">This Week</a>
+                                      <a class="dropdown-item" href="#">Today</a>
+                                    </div>
+                                  </div>
                             </div>
+
                         </div>
                     </div>
 
