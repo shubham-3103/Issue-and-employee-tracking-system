@@ -9,6 +9,11 @@
     padding: 2%;
     margin-bottom: 5%;
 }
+.float-right{
+    position: relative;
+    left: 80%;        
+    margin: 1%;
+}
 .back-to-top {
     position: fixed;
     display: none;
@@ -103,6 +108,7 @@
         width: 100%;
         margin-left: 0;
     }
+    
 }
 
 @media (max-width: 991.98px) {
@@ -117,6 +123,11 @@
     .content {
         width: 100%;
         margin-left: 0;
+    }
+    .float-right{
+        position: relative;
+        left: 62%;        
+        margin: 1%;
     }
 }
 
@@ -228,6 +239,11 @@
 @media (max-width: 575.98px) {
     .content .navbar .navbar-nav .nav-link {
         margin-left: 15px;
+    }
+    .float-right{
+        position: relative;
+        left: 46%;        
+        margin: 1%;
     }
 }
 
