@@ -8,7 +8,7 @@ const { Script } = require('vm');
 const { setTimeout } = require('timers/promises');
 const { count } = require('console');
 const flash = require('express-flash');
-
+session = require('express-session')
 
 // const path = require('path');
 // const { query, response } = require('express');
@@ -30,7 +30,7 @@ const db = mysql.createConnection({
   app.use(express.json());
   app.use(express.urlencoded({ extended: true }));
   app.use(express.static(path.join(__dirname)));
-
+  app.use(session({ resave: true ,secret: 'sus' , saveUninitialized: true}));
 //Connect
 db.connect((err) => {
     if(err){
@@ -46,23 +46,6 @@ app.get('/',(req,res)=>{
 app.get('/usersignup',(req,res)=>{
     const data3 = fs.readFileSync(path.join(__dirname+'/usersignup.html'));
     res.send(data3.toString());
-    
-    // var usersignup = req.query.usersignnup_name;
-    // var userpass = req.query.usersignup_pass;
-    // var values3 = [
-    //     [usersignup, userpass]
-    // ]
-    // if(usersignup==undefined){
-    //     console.log("add query")
-    // }else{
-    // db.query("INSERT INTO userlogin(login_id, password) VALUES ?", [values3], function(err,result){
-    //     if (err) throw err;
-    //     console.log('record inserted');
-    //     res.redirect('/');
-        
-    // })
-    // return
-// }
 })
 app.get('/usersignuprun',(req,res)=>{
     var usersignup = req.query.email;
@@ -70,12 +53,8 @@ app.get('/usersignuprun',(req,res)=>{
     var values3 = [
         [usersignup, userpass]
     ]
-    
-    // db.query(`select count(login_id) from userlogin where login_id='${usersignup}'`,function(err,result){
-    //     const results = Object.values(JSON.parse(JSON.stringify(result))[0]);
-    //     count = (results[0]);
-    // })
-    // console.log(count)
+    req.session;
+    req.session.email=usersignup;
     db.query("INSERT INTO userlogin(login_id, password) VALUES ?", [values3], function(err,result){
         if (err){ 
             res.send('Email already exist, Please go back')
@@ -94,7 +73,8 @@ app.get('/usersignin',(req,res)=>{
 app.get('/usersigninrun',(req,res)=>{
     var signin_name = req.query.your_name;
     var signin_pass = req.query.your_pass;
-
+    req.session;
+    req.session.email=signin_name;
     db.query(`select * from userlogin where login_id= '${signin_name}' and password = '${signin_pass}'` ,function(err,result){
         if(err) throw err;
         if(result.length>0){
@@ -123,19 +103,20 @@ app.get('/createquerypage',(req,res)=>{
 app.get('/createquery',(req,res,next)=>{
     var name = req.query.username;
     var mob = req.query.mobile;
-    var address = req.query.address;
-    var email = req.query.email;
+    var orgname = req.query.orgname;
+    var deptname = req.query.deptname;
+    var email = req.session.email;
     var p_name = req.query.p_name;
     var description = req.query.description;
-   
+    console.log(req.session.email);
     var values=[
-        [name,mob,address,email]
+        [name,mob,orgname,deptname,email]
     ]
     var values2=[
         [p_name, description]
     ]
     
-    db.query("INSERT INTO user(name, mob, address, email) VALUES ?", [values], function(err,result){
+    db.query("INSERT INTO user(name, mob, orgname, deptname, email) VALUES ?", [values], function(err,result){
         if (err) throw err;
         console.log('record inserted');
         res.redirect('/')
@@ -201,9 +182,10 @@ app.use('/adminpanelrun', (req,res) => {
         if(err) throw err;
         if(result.length>0){
             req.session;
+            req.session.eid=admin_email;
             res.redirect('/adminpanel')
         }
-          
+        // console.log(req.session.eid)  
     })   
 })
 //work of admin both given 2 function given below
@@ -219,13 +201,10 @@ app.use('/assignengineer', (req,res) => {
 })
 
 app.get('/adminpanel',(req,res)=>{
-    // const data6 = fs.readFileSync('adminpanel.ejs');
-    // res.send(data6.toString());
-    // sessionStorage.setItem()
     db.query(`select COUNT(q_id) as remquery from ( SELECT q_id FROM query where status = 0) A UNION ALL select Count(e_id) FROM (select e_id FROM engineer) B UNION ALL SELECT COUNT(e_id) from (SELECT e_id FROM engineer WHERE engineer.status = 0) C UNION ALL select COUNT(u_id) FROM (SELECT u_id from user) D UNION ALL select p_name FROM (SELECT p_name from query where status = 0) E UNION ALL select description FROM (SELECT description from query where status = 0) F UNION ALL select q_id FROM (SELECT q_id from query where status = 0) G UNION ALL select e_id FROM (SELECT e_id from query where status = 0) H UNION ALL select u_id FROM (SELECT u_id from query where status = 0) I UNION ALL select start_date FROM (SELECT start_date from query where status = 0) J UNION ALL select end_date FROM (SELECT end_date from query where status = 0) K UNION ALL select status FROM (SELECT status from query where status = 0) L UNION ALL select feedback FROM (SELECT feedback from query where status = 0) M;`,function(err,result){
-        
+        // req.session;
         if(err) throw err;
-        console.log((result[4])==undefined)
+        console.log((req.session.eid))
 
         if((result[4])==undefined){
             res.render("adminpanel",{ adminsolve: { remquery: Object.values(result[0]), toteng: Object.values(result[1]), engfree: Object.values(result[2]), totuser: Object.values(result[3]), querypname: 0, querydesc: 0, queryqid: 0, queryeid: 0, queryuid: 0, querystart: 0, queryend: 0, querystatus: 0, queryfeed: 0 }});
@@ -233,17 +212,7 @@ app.get('/adminpanel',(req,res)=>{
         else{
         res.render("adminpanel",{ adminsolve: { remquery: Object.values(result[0]), toteng: Object.values(result[1]), engfree: Object.values(result[2]), totuser: Object.values(result[3]), querypname: Object.values(result[4]), querydesc: Object.values(result[5]), queryqid: Object.values(result[6]), queryeid: Object.values(result[7]), queryuid: Object.values(result[8]), querystart: Object.values(result[9]), queryend: Object.values(result[10]), querystatus: Object.values(result[11]), queryfeed: Object.values(result[12]) }});    
         }
-    })
-    
-    // db.query(`SELECT COUNT(e_id) from engineer`,function(err,result){
-    //     if(err) throw err;
-    //     var q = Object.values(Object.values(JSON.parse(JSON.stringify(result)))[0]);
-    //     q=q[0]
-    //     console.log(q)
-    //     res.render("adminpanel",{totaleng: q });
-    // })    
-    
-     
+    })     
 })
 
 // app.use('/adminpanel', (req,res) => {
