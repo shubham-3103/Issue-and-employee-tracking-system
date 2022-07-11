@@ -8,6 +8,7 @@ const { Script } = require('vm');
 const { setTimeout } = require('timers/promises');
 const { count } = require('console');
 const flash = require('express-flash');
+const { TIMEOUT } = require('dns');
 session = require('express-session')
 
 // const path = require('path');
@@ -109,12 +110,16 @@ app.get('/createquery',(req,res,next)=>{
     var p_name = req.query.p_name;
     var description = req.query.description;
     console.log(req.session.email);
+    if(email==undefined){
+        res.status(400).send("Please Go Back To Login Page And Again Sign In And Do Not Refresh The Pages.")
+    }else{
     var values=[
         [name,mob,orgname,deptname,email]
     ]
     var values2=[
         [p_name, description]
     ]
+    console.log(req.session.email)
     
     db.query("INSERT INTO user(name, mob, orgname, deptname, email) VALUES ?", [values], function(err,result){
         if (err) throw err;
@@ -139,7 +144,8 @@ app.get('/createquery',(req,res,next)=>{
             console.log('record updated');
             return;
         })
-    })
+    })}
+    res.status(200)
 })
 
 app.get('/createadmin',(req,res)=>{
@@ -209,9 +215,12 @@ app.get('/adminpanel',(req,res)=>{
         if((result[4])==undefined){
             res.render("adminpanel",{ adminsolve: { remquery: Object.values(result[0]), toteng: Object.values(result[1]), engfree: Object.values(result[2]), totuser: Object.values(result[3]), querypname: 0, querydesc: 0, queryqid: 0, queryeid: 0, queryuid: 0, querystart: 0, queryend: 0, querystatus: 0, queryfeed: 0 }});
         }
+        
         else{
-        res.render("adminpanel",{ adminsolve: { remquery: Object.values(result[0]), toteng: Object.values(result[1]), engfree: Object.values(result[2]), totuser: Object.values(result[3]), querypname: Object.values(result[4]), querydesc: Object.values(result[5]), queryqid: Object.values(result[6]), queryeid: Object.values(result[7]), queryuid: Object.values(result[8]), querystart: Object.values(result[9]), queryend: Object.values(result[10]), querystatus: Object.values(result[11]), queryfeed: Object.values(result[12]) }});    
+            var increment = Object.values(result[0])-1;
+        res.render("adminpanel",{ adminsolve: { remquery: Object.values(result[0]), toteng: Object.values(result[1]), engfree: Object.values(result[2]), totuser: Object.values(result[3]), querypname: Object.values(result[4+increment]), querydesc: Object.values(result[5+increment*2]), queryqid: Object.values(result[6+increment*3]), queryeid: Object.values(result[7+increment*4]), queryuid: Object.values(result[8+increment*5]), querystart: Object.values(result[9+increment*6]), queryend: Object.values(result[10+increment*7]), querystatus: Object.values(result[11+increment*8]), queryfeed: Object.values(result[12+increment*9]) }});    
         }
+        console.log(Object.values(result))
     })     
 })
 
