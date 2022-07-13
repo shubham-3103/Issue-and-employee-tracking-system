@@ -210,7 +210,6 @@ app.get('/adminpanel',(req,res)=>{
     db.query(`select COUNT(q_id) as remquery from ( SELECT q_id FROM query where status = 0) A UNION ALL select Count(e_id) FROM (select e_id FROM engineer) B UNION ALL SELECT COUNT(e_id) from (SELECT e_id FROM engineer WHERE engineer.status = 0) C UNION ALL select COUNT(u_id) FROM (SELECT u_id from user) D UNION ALL select p_name FROM (SELECT p_name from query where status = 0) E UNION ALL select description FROM (SELECT description from query where status = 0) F UNION ALL select q_id FROM (SELECT q_id from query where status = 0) G UNION ALL select e_id FROM (SELECT e_id from query where status = 0) H UNION ALL select u_id FROM (SELECT u_id from query where status = 0) I UNION ALL select start_date FROM (SELECT start_date from query where status = 0) J UNION ALL select end_date FROM (SELECT end_date from query where status = 0) K UNION ALL select status FROM (SELECT status from query where status = 0) L UNION ALL select feedback FROM (SELECT feedback from query where status = 0) M;`,function(err,result){
         // req.session;
         if(err) throw err;
-        console.log((req.session.eid))
 
         if((result[4])==undefined){
             res.render("adminpanel",{ adminsolve: { remquery: Object.values(result[0]), toteng: Object.values(result[1]), engfree: Object.values(result[2]), totuser: Object.values(result[3]), querypname: 0, querydesc: 0, queryqid: 0, queryeid: 0, queryuid: 0, querystart: 0, queryend: 0, querystatus: 0, queryfeed: 0 }});
@@ -220,7 +219,7 @@ app.get('/adminpanel',(req,res)=>{
             var increment = Object.values(result[0])-1;
         res.render("adminpanel",{ adminsolve: { remquery: Object.values(result[0]), toteng: Object.values(result[1]), engfree: Object.values(result[2]), totuser: Object.values(result[3]), querypname: Object.values(result[4+increment]), querydesc: Object.values(result[5+increment*2]), queryqid: Object.values(result[6+increment*3]), queryeid: Object.values(result[7+increment*4]), queryuid: Object.values(result[8+increment*5]), querystart: Object.values(result[9+increment*6]), queryend: Object.values(result[10+increment*7]), querystatus: Object.values(result[11+increment*8]), queryfeed: Object.values(result[12+increment*9]) }});    
         }
-        console.log(Object.values(result))
+        // console.log(Object.values(result))
     })     
 })
 
@@ -249,11 +248,25 @@ app.use('/afteradminpanel', (req,res) => {
         }) 
         res.redirect('/adminpanel')
 })
+// app.use('/remainingquery',(req,res)=>{
+//     db.query(`select p_name FROM (SELECT p_name from query where status = 0) E UNION ALL select description FROM (SELECT description from query where status = 0) F UNION ALL select q_id FROM (SELECT q_id from query where status = 0) G UNION ALL select e_id FROM (SELECT e_id from query where status = 0) H UNION ALL select u_id FROM (SELECT u_id from query where status = 0) I UNION ALL select start_date FROM (SELECT start_date from query where status = 0) J UNION ALL select end_date FROM (SELECT end_date from query where status = 0) K UNION ALL select status FROM (SELECT status from query where status = 0) L UNION ALL select feedback FROM (SELECT feedback from query where status = 0) M;`,function(err,result){
+//         if(err) throw err;
+//         console.log(Object.values(result).length)
+//         if((result[4])==undefined){
+//             res.render("remainingquery",{ remainquery: { querypname: 0, querydesc: 0, queryqid: 0, queryeid: 0, queryuid: 0, querystart: 0, queryend: 0, querystatus: 0, queryfeed: 0 }});
+//         }
+        
+//         else{
+//             var increment = Object.values(result[0])-1;
+//         res.render("remainingquery",{ remainquery: { querypname: Object.values(result[0]), querydesc: Object.values(result[2]), queryqid: Object.values(result[3]), queryeid: Object.values(result[4]), queryuid: Object.values(result[6]), querystart: Object.values(result[6]), queryend: Object.values(result[7]), querystatus: Object.values(result[8]), queryfeed: Object.values(result[9]) }});    
+//         }
+//     })
+// })
 
 app.get('/querysolve',(req,res)=>{
     //show in dropdown
     var q_solve = []
-    db.query('select query.q_id, p_name, description, e_id from query where query.status = 0', function(err,result){
+    db.query('select query.q_id, p_name, description, e_id from query where query.status = 0 and e_id is not NULL', function(err,result){
         if (err) throw err;
         const q = Object.values(JSON.parse(JSON.stringify(result)));
         q.forEach((v) => q_solve.push(Object.values(v)));

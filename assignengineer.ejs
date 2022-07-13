@@ -95,7 +95,7 @@
                                 <h6 class="mb-0">Engineer id, Enginner name, Engineer email, Product Name, Query id, User id:</h6>
                             </div>
                             <select name="e_id" id="e_id" class="droppanel">
-                            <% for (var i =0; i < (name1.toString().length) ;  i++ ) { %>
+                            <% for (var i =0; i < ((Object.values(name1).length)) ;  i++ ) { %>
                                 <option>
                                 <br/>  <%- name1[i] %> 
                                 <% } %>
