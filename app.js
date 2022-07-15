@@ -266,7 +266,23 @@ app.get('/adminpanel',(req,res)=>{
         res.render("adminpanel",{ adminsolve: { remquery: Object.values(result[0]), toteng: Object.values(result[1]), engfree: Object.values(result[2]), totuser: Object.values(result[3]), querypname: Object.values(result[4+increment]), querydesc: Object.values(result[5+increment*2]), queryqid: Object.values(result[6+increment*3]), queryeid: Object.values(result[7+increment*4]), queryuid: Object.values(result[8+increment*5]), querystart: Object.values(result[9+increment*6]), queryend: Object.values(result[10+increment*7]), querystatus: Object.values(result[11+increment*8]), queryfeed: Object.values(result[12+increment*9]) }});    
         }
         // console.log(Object.values(result))
-    })     
+    })  
+
+    var engvalue = []
+    db.query('select query.q_id, p_name, description, e_id from query where query.status = 0 and e_id is not NULL and query.resolution is not NULL', function(err,result){
+        if (err) throw err;
+        const q = Object.values(JSON.parse(JSON.stringify(result)));
+        q.forEach((v) => engvalue.push(Object.values(v)));
+        res.render("adminpanel",{engassign: engvalue });
+    })
+
+    // db.query(`select query.p_name, query.q_id, engineer.name, query.e_id from query, engineer where query.status = 0 and resolution is not NULL and engineer.e_id`,function(err,results){
+    //     eng = []
+    //     if(err) throw err;
+    //     const q = Object.values(JSON.parse(JSON.stringify(results)));
+    //     q.forEach((v) => eng.push(Object.values(v)));
+    //     res.render("adminpanel",{engassign: eng})
+    // })
 })
 
 // app.use('/adminpanel', (req,res) => {
@@ -312,7 +328,7 @@ app.use('/afteradminpanel', (req,res) => {
 app.get('/querysolve',(req,res)=>{
     //show in dropdown
     var q_solve = []
-    db.query('select query.q_id, p_name, description, e_id from query where query.status = 0 and e_id is not NULL', function(err,result){
+    db.query('select query.q_id, p_name, description, e_id from query where query.status = 0 and e_id is not NULL and query.resolution is not NULL', function(err,result){
         if (err) throw err;
         const q = Object.values(JSON.parse(JSON.stringify(result)));
         q.forEach((v) => q_solve.push(Object.values(v)));
