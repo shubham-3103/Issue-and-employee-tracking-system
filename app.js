@@ -86,6 +86,52 @@ app.get('/usersigninrun',(req,res)=>{
     })
     
 })
+app.get('/engineersignin',(req,res)=>{
+    const data5 = fs.readFileSync('engineersignin.html');
+    res.send(data5.toString());
+})
+app.get('/engineersigninrun',(req,res)=>{
+    var signin_name = req.query.your_name;
+    var signin_pass = req.query.your_pass;
+    req.session;
+    req.session.email=signin_name;
+    db.query(`select * from engineer where email= '${signin_name}' and password = '${signin_pass}'` ,function(err,result){
+        if(err) throw err;
+        if(result.length>0){
+            req.session;
+            res.redirect('/engineerpanel')
+        }
+    })
+    
+})
+app.get('/engineerpanel',(req,res)=>{
+    // const data6 = fs.readFileSync('engineerpanel.ejs');
+    // res.send(data6.toString());
+    email=(req.session.email)
+    // var e_id ;
+    db.query(`select e_id from engineer where email='${email}'`,function(err,result){
+        if(err) throw err;
+        var e_id = (Object.values((Object.values(JSON.parse(JSON.stringify(result))))[0]))
+
+        db.query(`select q_id, p_name, description from query where e_id=${e_id} and resolution is NULL`,function(err,results){
+            var q_id1=[];
+            const q = Object.values(JSON.parse(JSON.stringify(results)));
+            q.forEach((v) => q_id1.push(Object.values(v)));
+
+            res.render("engineerpanel",{query1:q_id1})
+        })
+    })
+    console.log(email)
+})
+app.get('/afterengineerpanel',function(req,res){
+    var q_id_get = (req.query.q_id.split(',')[0])
+    var getreso = (req.query.reso);
+    db.query(`update query set resolution = '${getreso}' where q_id = ${q_id_get}`,function(err,result){
+        if(err) throw err
+        console.log("Resolution has been updated")
+        res.redirect('/engineersignin')
+    })
+})
 
 app.get('/createadmin.html',(req,res)=>{
     const data2 = fs.readFileSync('createadmin.html');
