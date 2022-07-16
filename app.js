@@ -262,7 +262,7 @@ app.get('/adminpanel',(req,res)=>{
         // req.session;
         if(err) throw err;
 
-        if((result[4])==undefined ){
+        if((result[5])==undefined ){
             res.render("adminpanel",{ adminsolve: { remquery: Object.values(result[0]), toteng: Object.values(result[1]), engfree: Object.values(result[2]), totuser: Object.values(result[3]), querypname: 0, querydesc: 0, queryqid: 0, queryeid: 0, queryuid: 0, querystart: 0, queryend: 0, querystatus: 0, queryfeed: 0, countquery: 0 }});
         }
         else{
@@ -327,17 +327,40 @@ app.use('/afteradminpanel', (req,res) => {
 //         res.render("adminpanel",{ engassign : engvalue[0] });
 //     })
 // })
+app.use('/remainingquery',(req,res)=>{
+    db.query(`select p_name, description, q_id, e_id, u_id,feedback,resolution from query where status = 0`,function(err,result){
+        if(err) throw err;
+        // console.log(Object.values(result[0]))
+        // if((result[5])==undefined){
+        //     res.render("remainingquery",{ remainquery: { querypname: 0, querydesc: 0, queryqid: 0, queryeid: 0, queryuid: 0, querystart: 0, queryend: 0, querystatus: 0, queryfeed: 0 }});
+        // }
+        var rem_info = [];
+        const q = Object.values(JSON.parse(JSON.stringify(result)));
+        q.forEach((v) => rem_info.push(Object.values(v)));
+        console.log(rem_info[0].length)
+        for(var i = 0; i<rem_info.length; i++){
+            for( var j = 0; j<rem_info[0].length; j++){
+                if(rem_info[i][j] == undefined){
+                    rem_info[i][j] = 'Null';
+                }
+            }
+        }
+        res.render("remainingquery",{remain: rem_info });  
+    })
+})
 // app.use('/remainingquery',(req,res)=>{
-//     db.query(`select p_name FROM (SELECT p_name from query where status = 0) E UNION ALL select description FROM (SELECT description from query where status = 0) F UNION ALL select q_id FROM (SELECT q_id from query where status = 0) G UNION ALL select e_id FROM (SELECT e_id from query where status = 0) H UNION ALL select u_id FROM (SELECT u_id from query where status = 0) I UNION ALL select start_date FROM (SELECT start_date from query where status = 0) J UNION ALL select end_date FROM (SELECT end_date from query where status = 0) K UNION ALL select status FROM (SELECT status from query where status = 0) L UNION ALL select feedback FROM (SELECT feedback from query where status = 0) M;`,function(err,result){
+//     db.query(`select COUNT(q_id) from ( SELECT q_id FROM query where status = 0) A UNION ALL select p_name FROM (SELECT p_name from query where status = 0) E UNION ALL select description FROM (SELECT description from query where status = 0) F UNION ALL select q_id FROM (SELECT q_id from query where status = 0) G UNION ALL select e_id FROM (SELECT e_id from query where status = 0) H UNION ALL select u_id FROM (SELECT u_id from query where status = 0) I UNION ALL select start_date FROM (SELECT start_date from query where status = 0) J UNION ALL select end_date FROM (SELECT end_date from query where status = 0) K UNION ALL select status FROM (SELECT status from query where status = 0) L UNION ALL select feedback FROM (SELECT feedback from query where status = 0) M;`,function(err,result){
 //         if(err) throw err;
-//         console.log(Object.values(result).length)
-//         if((result[4])==undefined){
+//         console.log(Object.values(result[0]))
+//         if((result[5])==undefined){
 //             res.render("remainingquery",{ remainquery: { querypname: 0, querydesc: 0, queryqid: 0, queryeid: 0, queryuid: 0, querystart: 0, queryend: 0, querystatus: 0, queryfeed: 0 }});
 //         }
         
 //         else{
 //             var increment = Object.values(result[0])-1;
-//         res.render("remainingquery",{ remainquery: { querypname: Object.values(result[0]), querydesc: Object.values(result[2]), queryqid: Object.values(result[3]), queryeid: Object.values(result[4]), queryuid: Object.values(result[6]), querystart: Object.values(result[6]), queryend: Object.values(result[7]), querystatus: Object.values(result[8]), queryfeed: Object.values(result[9]) }});    
+//             for(var i=0; i<2; i++){
+//             res.render("remainingquery",{ remainquery: { querypname: Object.values(result[1]), querydesc: Object.values(result[2+increment+increment*i]), queryqid: Object.values(result[3+increment*2+increment*i]), queryeid: Object.values(result[4+increment*3+increment*i]), queryuid: Object.values(result[5+increment*4+increment*i]), querystart: Object.values(result[6+increment*5+increment*i]), queryend: Object.values(result[7+increment*6+increment*i]), querystatus: Object.values(result[8+increment*7+increment*i]), queryfeed: Object.values(result[9+increment*8+increment*i]) }});    
+//             }
 //         }
 //     })
 // })

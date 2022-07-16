@@ -217,6 +217,10 @@
     color: var(--light);
 }
 
+#remquery{
+    width: 100%;
+}
+
 .content .navbar .dropdown-item:hover,
 .content .navbar .dropdown-item.active {
     background: var(--dark);
