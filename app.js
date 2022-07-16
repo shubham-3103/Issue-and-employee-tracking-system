@@ -262,13 +262,13 @@ app.get('/adminpanel',(req,res)=>{
         // req.session;
         if(err) throw err;
 
-        if((result[4])==undefined){
+        if((result[4])==undefined ){
             res.render("adminpanel",{ adminsolve: { remquery: Object.values(result[0]), toteng: Object.values(result[1]), engfree: Object.values(result[2]), totuser: Object.values(result[3]), querypname: 0, querydesc: 0, queryqid: 0, queryeid: 0, queryuid: 0, querystart: 0, queryend: 0, querystatus: 0, queryfeed: 0, countquery: 0 }});
         }
-        
         else{
             var increment = Object.values(result[0])-1;
-        res.render("adminpanel",{ adminsolve: { remquery: Object.values(result[0]), toteng: Object.values(result[1]), engfree: Object.values(result[2]), totuser: Object.values(result[3]), querypname: Object.values(result[4+increment]), querydesc: Object.values(result[5+increment*2]), queryqid: Object.values(result[6+increment*3]), queryeid: Object.values(result[7+increment*4]), queryuid: Object.values(result[8+increment*5]), querystart: Object.values(result[9+increment*6]), queryend: Object.values(result[10+increment*7]), querystatus: Object.values(result[11+increment*8]), queryfeed: Object.values(result[12+increment*9]), countquery: Object.values(result[12+increment*10]) }});    
+            
+            res.render("adminpanel",{ adminsolve: { remquery: Object.values(result[0]), toteng: Object.values(result[1]), engfree: Object.values(result[2]), totuser: Object.values(result[3]), querypname: Object.values(result[4+increment]), querydesc: Object.values(result[5+increment*2]), queryqid: Object.values(result[6+increment*3]), queryeid: Object.values(result[7+increment*4]), queryuid: Object.values(result[8+increment*5]), querystart: Object.values(result[9+increment*6]), queryend: Object.values(result[10+increment*7]), querystatus: Object.values(result[11+increment*8]), queryfeed: Object.values(result[12+increment*9]), countquery: Object.values(result[13+increment*9]) }});    
         }
         // console.log(Object.values(result))
     })  
