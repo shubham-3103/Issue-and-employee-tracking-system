@@ -201,22 +201,31 @@
                             <div class="d-flex align-items-center justify-content-between mb-4">
                                 <h6 class="mb-0">Query Solved by Engineer</h6>
                             </div>
-                            <div class="d-flex align-items-center justify-content-between mb-4">
-                                <select name="e_id" id="e_id" class="droppanel">
-                                    <% for (var i =0; i < ((Object.values(engassign).length)) ;  i++ ) { %>
-                                    <option>
-                                    <br/>  <%- engassign[i] %> 
-                                    <% } %>
-                                    </option>
-                                </select><br>
+                            <div class="table-responsive">
+                                <table class="table text-start align-middle table-bordered table-hover mb-0">
+                                    <thead>
+                                        <tr class="text-white">
+                                            
+                                            <th scope="col">Number Of query Solved from Eng. Side</th>
+                                            
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr>
+                                            <td class="text-danger"><%- adminsolve.countquery[0] %></td>
+                                            </tr>
+                                            
+                                                                 
+                                    </tbody>
+                                </table>
                             </div>
-                            <!-- <div class="row">
-                                <div class="d-flex align-items-center border-bottom py-2 text-white">
+                            <div class="row">
+                                <!-- <div class="d-flex align-items-center border-bottom py-2 text-white">
                                     <a href="index.html">Globe Computer and Solution</a> All Right Reserved.  
                                 </div>
-                                <b><p class="text-white"><br>Designed By Shubham Sharma</p></b>
+                                <b><p class="text-white"><br>Designed By Shubham Sharma</p></b> -->
 
-                            </div> -->
+                            </div>
                             
                         </div>
                     </div>

@@ -228,6 +228,7 @@ app.get('/adminsignin',(req,res)=>{
     res.send(data6.toString());
 })
 app.use('/adminpanelrun', (req,res) => {
+    
     var admin_email = req.query.admin_email;
     var admin_pass = req.query.admin_pass;
     db.query(`select * from admin where admin_id='${admin_email}' and pass='${admin_pass}'`, function(err,result){
@@ -236,6 +237,9 @@ app.use('/adminpanelrun', (req,res) => {
             req.session;
             req.session.eid=admin_email;
             res.redirect('/adminpanel')
+        }else{
+            res.status(404).send('User Not Found');
+            return;
         }
         // console.log(req.session.eid)  
     })   
@@ -253,28 +257,31 @@ app.use('/assignengineer', (req,res) => {
 })
 
 app.get('/adminpanel',(req,res)=>{
-    db.query(`select COUNT(q_id) as remquery from ( SELECT q_id FROM query where status = 0) A UNION ALL select Count(e_id) FROM (select e_id FROM engineer) B UNION ALL SELECT COUNT(e_id) from (SELECT e_id FROM engineer WHERE engineer.status = 0) C UNION ALL select COUNT(u_id) FROM (SELECT u_id from user) D UNION ALL select p_name FROM (SELECT p_name from query where status = 0) E UNION ALL select description FROM (SELECT description from query where status = 0) F UNION ALL select q_id FROM (SELECT q_id from query where status = 0) G UNION ALL select e_id FROM (SELECT e_id from query where status = 0) H UNION ALL select u_id FROM (SELECT u_id from query where status = 0) I UNION ALL select start_date FROM (SELECT start_date from query where status = 0) J UNION ALL select end_date FROM (SELECT end_date from query where status = 0) K UNION ALL select status FROM (SELECT status from query where status = 0) L UNION ALL select feedback FROM (SELECT feedback from query where status = 0) M;`,function(err,result){
+    
+    db.query(`select COUNT(q_id) as remquery from ( SELECT q_id FROM query where status = 0) A UNION ALL select Count(e_id) FROM (select e_id FROM engineer) B UNION ALL SELECT COUNT(e_id) from (SELECT e_id FROM engineer WHERE engineer.status = 0) C UNION ALL select COUNT(u_id) FROM (SELECT u_id from user) D UNION ALL select p_name FROM (SELECT p_name from query where status = 0) E UNION ALL select description FROM (SELECT description from query where status = 0) F UNION ALL select q_id FROM (SELECT q_id from query where status = 0) G UNION ALL select e_id FROM (SELECT e_id from query where status = 0) H UNION ALL select u_id FROM (SELECT u_id from query where status = 0) I UNION ALL select start_date FROM (SELECT start_date from query where status = 0) J UNION ALL select end_date FROM (SELECT end_date from query where status = 0) K UNION ALL select status FROM (SELECT status from query where status = 0) L UNION ALL select feedback FROM (SELECT feedback from query where status = 0) M UNION ALL select count(q_id) FROM (select q_id from query where query.status = 0 and e_id is not NULL and query.resolution is not NULL) M ;`,function(err,result){
         // req.session;
         if(err) throw err;
 
         if((result[4])==undefined){
-            res.render("adminpanel",{ adminsolve: { remquery: Object.values(result[0]), toteng: Object.values(result[1]), engfree: Object.values(result[2]), totuser: Object.values(result[3]), querypname: 0, querydesc: 0, queryqid: 0, queryeid: 0, queryuid: 0, querystart: 0, queryend: 0, querystatus: 0, queryfeed: 0 }});
+            res.render("adminpanel",{ adminsolve: { remquery: Object.values(result[0]), toteng: Object.values(result[1]), engfree: Object.values(result[2]), totuser: Object.values(result[3]), querypname: 0, querydesc: 0, queryqid: 0, queryeid: 0, queryuid: 0, querystart: 0, queryend: 0, querystatus: 0, queryfeed: 0, countquery: 0 }});
         }
         
         else{
             var increment = Object.values(result[0])-1;
-        res.render("adminpanel",{ adminsolve: { remquery: Object.values(result[0]), toteng: Object.values(result[1]), engfree: Object.values(result[2]), totuser: Object.values(result[3]), querypname: Object.values(result[4+increment]), querydesc: Object.values(result[5+increment*2]), queryqid: Object.values(result[6+increment*3]), queryeid: Object.values(result[7+increment*4]), queryuid: Object.values(result[8+increment*5]), querystart: Object.values(result[9+increment*6]), queryend: Object.values(result[10+increment*7]), querystatus: Object.values(result[11+increment*8]), queryfeed: Object.values(result[12+increment*9]) }});    
+        res.render("adminpanel",{ adminsolve: { remquery: Object.values(result[0]), toteng: Object.values(result[1]), engfree: Object.values(result[2]), totuser: Object.values(result[3]), querypname: Object.values(result[4+increment]), querydesc: Object.values(result[5+increment*2]), queryqid: Object.values(result[6+increment*3]), queryeid: Object.values(result[7+increment*4]), queryuid: Object.values(result[8+increment*5]), querystart: Object.values(result[9+increment*6]), queryend: Object.values(result[10+increment*7]), querystatus: Object.values(result[11+increment*8]), queryfeed: Object.values(result[12+increment*9]), countquery: Object.values(result[12+increment*10]) }});    
         }
         // console.log(Object.values(result))
     })  
 
-    var engvalue = []
-    db.query('select query.q_id, p_name, description, e_id from query where query.status = 0 and e_id is not NULL and query.resolution is not NULL', function(err,result){
-        if (err) throw err;
-        const q = Object.values(JSON.parse(JSON.stringify(result)));
-        q.forEach((v) => engvalue.push(Object.values(v)));
-        res.render("adminpanel",{engassign: engvalue });
-    })
+    
+    // db.query('select query.q_id, p_name, description, e_id from query where query.status = 0 and e_id is not NULL and query.resolution is not NULL', function(err,result){
+    //     var engvalue = []
+    //     if (err) throw err;
+    //     const q = Object.values(JSON.parse(JSON.stringify(result)));
+    //     q.forEach((v) => engvalue.push(Object.values(v)));
+    //     console.log(engvalue)
+    //     res.render("adminpanel",{ engassign : engvalue[0] });
+    // })
 
     // db.query(`select query.p_name, query.q_id, engineer.name, query.e_id from query, engineer where query.status = 0 and resolution is not NULL and engineer.e_id`,function(err,results){
     //     eng = []
@@ -310,6 +317,16 @@ app.use('/afteradminpanel', (req,res) => {
         }) 
         res.redirect('/adminpanel')
 })
+// app.use('/afterafteradminpanel',function(req,res){
+//     db.query('select query.q_id, p_name, description, e_id from query where query.status = 0 and e_id is not NULL and query.resolution is not NULL', function(err,result){
+//         var engvalue = []
+//         if (err) throw err;
+//         const q = Object.values(JSON.parse(JSON.stringify(result)));
+//         q.forEach((v) => engvalue.push(Object.values(v)));
+//         console.log(engvalue)
+//         res.render("adminpanel",{ engassign : engvalue[0] });
+//     })
+// })
 // app.use('/remainingquery',(req,res)=>{
 //     db.query(`select p_name FROM (SELECT p_name from query where status = 0) E UNION ALL select description FROM (SELECT description from query where status = 0) F UNION ALL select q_id FROM (SELECT q_id from query where status = 0) G UNION ALL select e_id FROM (SELECT e_id from query where status = 0) H UNION ALL select u_id FROM (SELECT u_id from query where status = 0) I UNION ALL select start_date FROM (SELECT start_date from query where status = 0) J UNION ALL select end_date FROM (SELECT end_date from query where status = 0) K UNION ALL select status FROM (SELECT status from query where status = 0) L UNION ALL select feedback FROM (SELECT feedback from query where status = 0) M;`,function(err,result){
 //         if(err) throw err;
