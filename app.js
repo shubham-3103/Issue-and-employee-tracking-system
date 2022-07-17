@@ -9,6 +9,7 @@ const { setTimeout } = require('timers/promises');
 const { count } = require('console');
 const flash = require('express-flash');
 const { TIMEOUT } = require('dns');
+
 session = require('express-session')
 
 // const path = require('path');
@@ -397,6 +398,8 @@ app.get('/afterquerysolve',(req,res)=>{
     })
     res.redirect('/querysolve')
 })
+
+
 
 app.use('/logout', (req,res) => {
     res.destroy;
