@@ -356,16 +356,6 @@ app.use('/afteradminpanel', (req,res) => {
         res.redirect('/adminpanel')  
 >>>>>>> 5f86f1e (all done)
 })
-// app.use('/afterafteradminpanel',function(req,res){
-//     db.query('select query.q_id, p_name, description, e_id from query where query.status = 0 and e_id is not NULL and query.resolution is not NULL', function(err,result){
-//         var engvalue = []
-//         if (err) throw err;
-//         const q = Object.values(JSON.parse(JSON.stringify(result)));
-//         q.forEach((v) => engvalue.push(Object.values(v)));
-//         console.log(engvalue)
-//         res.render("adminpanel",{ engassign : engvalue[0] });
-//     })
-// })
 app.use('/remainingquery',(req,res)=>{
     db.query(`select p_name, description, q_id, e_id, u_id,feedback,resolution from query where status = 0`,function(err,result){
         if(err) throw err;
