@@ -220,14 +220,15 @@ app.get('/createengineer',(req,res,next)=>{
     var engineer_name = req.query.engineer_name;
     var engineer_email = req.query.engineer_email;
     var engineer_mobile = req.query.engineer_mob;
+    var engineer_pass = req.query.engineer_pass;
     
     var values=[
-        [engineer_name,engineer_email,engineer_mobile]
+        [engineer_name,engineer_email,engineer_mobile,engineer_pass]
     ]
-    db.query("INSERT INTO engineer(name, email, mob) VALUES ?", [values], function(err,result){
+    db.query("INSERT INTO engineer(name, email, mob, password) VALUES ?", [values], function(err,result){
         if (err) throw err;
         console.log('record inserted');
-        res.redirect('/')
+        res.redirect('/adminpanel')
     })
 })
 
@@ -254,14 +255,14 @@ app.use('/adminpanelrun', (req,res) => {
 })
 //work of admin both given 2 function given below
 app.use('/assignengineer', (req,res) => {
+    
     var e_info = []
     db.query('select engineer.e_id, name, email, p_name, description, query.q_id, query.u_id from engineer, query where engineer.status = 0 and query.status = 0 and query.e_id IS NULL;', function(err,result){
         if (err) throw err;
         const q = Object.values(JSON.parse(JSON.stringify(result)));
         q.forEach((v) => e_info.push(Object.values(v)));
-        for (let i = 0; i < e_info.length; i++) {
-        }res.render("assignengineer",{name1: e_info });   
-    })   
+        res.render("assignengineer",{name1: e_info });       
+    })       
 })
 
 app.get('/adminpanel',(req,res)=>{
@@ -321,8 +322,34 @@ app.use('/afteradminpanel', (req,res) => {
         db.query(`update engineer set status = 1 where e_id ='${e_id.split(',')[0]}' `,function(err,result){
             if (err) throw err;
             console.log('status set to 1')
-            return
         }) 
+        db.query(`select engineer.email from engineer where engineer.e_id=${e_id.split(',')[0]};`,function(err,result){
+            console.log(result)
+            var sendingemail = (Object.values(JSON.parse(JSON.stringify(result)))[0].email);
+    
+            var transport = nodemailer.createTransport({
+                host: "smtp.gmail.com",
+                port: 465,
+                auth: {
+                  user: "shubhamsharma31031991@gmail.com",
+                  pass: "kiigkwmyusdntexs",
+                }
+              });
+            var mailOptions = {
+                from: 'shubhamsharma31031991@gmail.com',
+                to: `${sendingemail}`,
+                subject: 'Query Assigned',
+                text: `Query Had been asigned to you`,
+            }; 
+            transport.sendMail(mailOptions, function(error, info){
+                if (error) {
+                  console.log(error);
+                } else {
+                  console.log('Email sent: ' + info.response);
+                }
+            }); 
+        })
+    
         res.redirect('/adminpanel')
 })
 // app.use('/afterafteradminpanel',function(req,res){
