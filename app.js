@@ -9,7 +9,8 @@ const { setTimeout } = require('timers/promises');
 const { count } = require('console');
 const flash = require('express-flash');
 const { TIMEOUT } = require('dns');
-
+var nodemailer = require('nodemailer');
+const { send } = require('process');
 session = require('express-session')
 
 // const path = require('path');
@@ -101,6 +102,9 @@ app.get('/engineersigninrun',(req,res)=>{
         if(result.length>0){
             req.session;
             res.redirect('/engineerpanel')
+        }
+        else{
+            res.send('Wrong Email Id or Password')
         }
     })
     
@@ -377,7 +381,6 @@ app.get('/querysolve',(req,res)=>{
     })
 })
 app.get('/afterquerysolve',(req,res)=>{
-    
     var query_enddate = req.query.end_date;
     var q_id = req.query.q_id;
     db.query(`update query set end_date = '${query_enddate}', status = 1 where q_id = ${q_id.split(',')[0]}`, function(err,result){
@@ -395,11 +398,54 @@ app.get('/afterquerysolve',(req,res)=>{
         console.log("date added")
         console.log(query_enddate)
         })
+
+        db.query(`select user.email from user where user.u_id=(select u_id from query where q_id = ${q_id.split(',')[0]});`,function(err,result){
+            var sendingemail = (Object.values(JSON.parse(JSON.stringify(result)))[0].email);
+
+            var transport = nodemailer.createTransport({
+                host: "smtp.gmail.com",
+                port: 465,
+                auth: {
+                  user: "shubhamsharma31031991@gmail.com",
+                  pass: "kiigkwmyusdntexs",
+                }
+              });
+            var mailOptions = {
+                from: 'shubhamsharma31031991@gmail.com',
+                to: `${sendingemail}`,
+                subject: 'FeedBack',
+                text: `Please provide your valuable feedback on this link: 'http://localhost:3000/userfeedback?q_id=${q_id.split(',')[0]}`,
+                // http://localhost:3000/userfeedbackrun?rating=Excellent&q_id=5
+            }; 
+            transport.sendMail(mailOptions, function(error, info){
+                if (error) {
+                  console.log(error);
+                } else {
+                  console.log('Email sent: ' + info.response);
+                }
+            }); 
+        })
     })
     res.redirect('/querysolve')
 })
 
+app.get('/userfeedback',function(req,res){
+    // const data8 = fs.readFileSync('userfeedback.ejs')
+    // const q_iddata = `${req.query.q_id}`;
+    const q_iddata=req.query.q_id.split(',')[0]
+    console.log(q_iddata);
+    res.render("userfeedback",{ queryid : q_iddata })
+    // res.send(data8.toString())
+})
 
+app.use('/userfeedbackrun',function(req,res){
+    console.log(req.query)
+    db.query(`update query set query.feedback='${req.query.rating}' where q_id = ${req.query.queryidvalue}`,function(err,result){
+            if (err) throw err;
+            console.log('query updated')
+    })
+    res.redirect('/');
+})
 
 app.use('/logout', (req,res) => {
     res.destroy;

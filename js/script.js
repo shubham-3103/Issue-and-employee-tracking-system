@@ -3,7 +3,7 @@ const ratings = document.querySelectorAll('.rating')
 const ratingsContainer = document.querySelector('.ratings-container')
 const sendBtn = document.querySelector('#send')
 const panel = document.querySelector('#panel')
-let selectedRating = 'Satisfied'
+let selectedRating = 'Excellent'
 
 ratingsContainer.addEventListener('click', (e) => {
     if(e.target.parentNode.classList.contains('rating')) {
@@ -19,15 +19,15 @@ ratingsContainer.addEventListener('click', (e) => {
 
 })
 
-sendBtn.addEventListener('click', (e) => {
-    panel.innerHTML = `
+// sendBtn.addEventListener('click', (e) => {
+//     panel.innerHTML = `
         
-        Thank You!
+//         Thank You!
         
-        Feedback : ${selectedRating}
-        We'll use your feedback to improve our customer support
-    `
-})
+//         Feedback : ${selectedRating}
+//         We'll use your feedback to improve our customer support
+//     `
+// })
 
 function removeActive() {
     for(let i = 0; i < ratings.length; i++) {
