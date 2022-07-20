@@ -85,6 +85,9 @@ app.get('/usersigninrun',(req,res)=>{
             // req.session.signin_name = signin_name; 
             res.redirect('/createquerypage')
         }
+        else{
+            res.send('Wrong Email Id or Password')
+        }
     })
     
 })
@@ -342,6 +345,9 @@ app.use('/remainingquery',(req,res)=>{
         var rem_info = [];
         const q = Object.values(JSON.parse(JSON.stringify(result)));
         q.forEach((v) => rem_info.push(Object.values(v)));
+        if(rem_info[0]==undefined){
+            res.redirect('/adminpanel')
+        }else{
         console.log(rem_info[0].length)
         for(var i = 0; i<rem_info.length; i++){
             for( var j = 0; j<rem_info[0].length; j++){
@@ -350,7 +356,7 @@ app.use('/remainingquery',(req,res)=>{
                 }
             }
         }
-        res.render("remainingquery",{remain: rem_info });  
+        res.render("remainingquery",{remain: rem_info });  }
     })
 })
 // app.use('/remainingquery',(req,res)=>{
