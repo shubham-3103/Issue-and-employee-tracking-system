@@ -95,7 +95,7 @@
                           <h6 class="mb-0">Query id, Product Name, Description, Engineer Id </h6>
                       </div>
                       <div class="d-flex align-items-center justify-content-between mb-4">
-                          <select name="q_id" id="q_id" class="droppanel">
+                          <select name="q_id" id="q_id" class="droppanelnew" required>
                             <% for (var i =0; i < ((Object.values(qsolve).length)) ;  i++ ) { %>
                               <option>
                               <br/>  <%- qsolve[i] %> 
@@ -107,8 +107,9 @@
                           <h6 class="mb-0">Choose End date of query</h6>
                         </div>
                         <div class="d-flex align-items-center justify-content-between mb-4">
-                        <input type="date" name="end_date" id="end_date" required class="droppanel"><br>
+                        <input type="date" name="end_date" id="end_date" required class="droppanelnew"><br>
                       </div>
+                      <br>
                         <button type="submit" class="btn btn-primary ms-2">Submit</button>
                       </form>
                     </div>

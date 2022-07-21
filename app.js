@@ -1,20 +1,9 @@
 const express = require('express');
 const mysql = require('mysql');
 const fs = require('fs');
-const cors = require('cors')
-const dotenv = require('dotenv');
 const path = require('path');
-const { Script } = require('vm');
-const { setTimeout } = require('timers/promises');
-const { count } = require('console');
-const flash = require('express-flash');
-const { TIMEOUT } = require('dns');
 var nodemailer = require('nodemailer');
-const { send } = require('process');
 session = require('express-session')
-
-// const path = require('path');
-// const { query, response } = require('express');
 const port = 3000;
 const app = express();
 
@@ -200,6 +189,18 @@ app.get('/createquery',(req,res,next)=>{
         })
     })}
     res.status(200)
+})
+
+app.get('/engineerdetails',(req,res)=>{
+    var email = (req.session.email);
+    db.query(`SELECT user.name as username, user.mob as usermob FROM user where user.u_id IN (select query.u_id from query where query.e_id = (select engineer.e_id from engineer where engineer.email='${email}') and query.status = 0)`,function(err,result){
+        if(err) throw err;
+        var detail=[];
+        const q = Object.values(JSON.parse(JSON.stringify(result)));
+        q.forEach((v) => detail.push(Object.values(v)));
+        console.log(detail[0])
+        res.render("engineerdetails",{engdet:detail[0]})
+    })
 })
 
 app.get('/createadmin',(req,res)=>{
