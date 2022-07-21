@@ -102,10 +102,7 @@ app.get('/engineersigninrun',(req,res)=>{
     
 })
 app.get('/engineerpanel',(req,res)=>{
-    // const data6 = fs.readFileSync('engineerpanel.ejs');
-    // res.send(data6.toString());
     email=(req.session.email)
-    // var e_id ;
     db.query(`select e_id from engineer where email='${email}'`,function(err,result){
         if(err) throw err;
         var e_id = (Object.values((Object.values(JSON.parse(JSON.stringify(result))))[0]))
@@ -251,7 +248,6 @@ app.use('/adminpanelrun', (req,res) => {
             res.status(404).send('User Not Found');
             return;
         }
-        // console.log(req.session.eid)  
     })   
 })
 //work of admin both given 2 function given below
@@ -269,7 +265,6 @@ app.use('/assignengineer', (req,res) => {
 app.get('/adminpanel',(req,res)=>{
     
     db.query(`select COUNT(q_id) as remquery from ( SELECT q_id FROM query where status = 0) A UNION ALL select Count(e_id) FROM (select e_id FROM engineer) B UNION ALL SELECT COUNT(e_id) from (SELECT e_id FROM engineer WHERE engineer.status = 0) C UNION ALL select COUNT(u_id) FROM (SELECT u_id from user) D UNION ALL select p_name FROM (SELECT p_name from query where status = 0) E UNION ALL select description FROM (SELECT description from query where status = 0) F UNION ALL select q_id FROM (SELECT q_id from query where status = 0) G UNION ALL select e_id FROM (SELECT e_id from query where status = 0) H UNION ALL select u_id FROM (SELECT u_id from query where status = 0) I UNION ALL select start_date FROM (SELECT start_date from query where status = 0) J UNION ALL select end_date FROM (SELECT end_date from query where status = 0) K UNION ALL select status FROM (SELECT status from query where status = 0) L UNION ALL select feedback FROM (SELECT feedback from query where status = 0) M UNION ALL select count(q_id) FROM (select q_id from query where query.status = 0 and e_id is not NULL and query.resolution is not NULL) M ;`,function(err,result){
-        // req.session;
         if(err) throw err;
 
         if((result[5])==undefined ){
@@ -280,39 +275,9 @@ app.get('/adminpanel',(req,res)=>{
             
             res.render("adminpanel",{ adminsolve: { remquery: Object.values(result[0]), toteng: Object.values(result[1]), engfree: Object.values(result[2]), totuser: Object.values(result[3]), querypname: Object.values(result[4+increment]), querydesc: Object.values(result[5+increment*2]), queryqid: Object.values(result[6+increment*3]), queryeid: Object.values(result[7+increment*4]), queryuid: Object.values(result[8+increment*5]), querystart: Object.values(result[9+increment*6]), queryend: Object.values(result[10+increment*7]), querystatus: Object.values(result[11+increment*8]), queryfeed: Object.values(result[12+increment*9]), countquery: Object.values(result[13+increment*9]) }});    
         }
-        // console.log(Object.values(result))
     })  
-
-    
-    // db.query('select query.q_id, p_name, description, e_id from query where query.status = 0 and e_id is not NULL and query.resolution is not NULL', function(err,result){
-    //     var engvalue = []
-    //     if (err) throw err;
-    //     const q = Object.values(JSON.parse(JSON.stringify(result)));
-    //     q.forEach((v) => engvalue.push(Object.values(v)));
-    //     console.log(engvalue)
-    //     res.render("adminpanel",{ engassign : engvalue[0] });
-    // })
-
-    // db.query(`select query.p_name, query.q_id, engineer.name, query.e_id from query, engineer where query.status = 0 and resolution is not NULL and engineer.e_id`,function(err,results){
-    //     eng = []
-    //     if(err) throw err;
-    //     const q = Object.values(JSON.parse(JSON.stringify(results)));
-    //     q.forEach((v) => eng.push(Object.values(v)));
-    //     res.render("adminpanel",{engassign: eng})
-    // })
 })
 
-// app.use('/adminpanel', (req,res) => {
-    
-//     var e_info = []
-//     db.query('select engineer.e_id, name, email, p_name, description, query.q_id, query.u_id from engineer, query where engineer.status = 0 and query.status = 0 and query.e_id IS NULL;', function(err,result){
-//         if (err) throw err;
-//         const q = Object.values(JSON.parse(JSON.stringify(result)));
-//         q.forEach((v) => e_info.push(Object.values(v)));
-//         for (let i = 0; i < e_info.length; i++) {
-//         }res.render("adminpanel",{name1: e_info });   
-//     })   
-// })
 app.use('/afteradminpanel', (req,res) => {
     var e_id = req.query.e_id;     
     console.log(e_id)   
@@ -360,10 +325,6 @@ app.use('/afteradminpanel', (req,res) => {
 app.use('/remainingquery',(req,res)=>{
     db.query(`select p_name, description, q_id, e_id, u_id,feedback,resolution from query where status = 0`,function(err,result){
         if(err) throw err;
-        // console.log(Object.values(result[0]))
-        // if((result[5])==undefined){
-        //     res.render("remainingquery",{ remainquery: { querypname: 0, querydesc: 0, queryqid: 0, queryeid: 0, queryuid: 0, querystart: 0, queryend: 0, querystatus: 0, queryfeed: 0 }});
-        // }
         var rem_info = [];
         const q = Object.values(JSON.parse(JSON.stringify(result)));
         q.forEach((v) => rem_info.push(Object.values(v)));
@@ -381,22 +342,6 @@ app.use('/remainingquery',(req,res)=>{
         res.render("remainingquery",{remain: rem_info });  }
     })
 })
-// app.use('/remainingquery',(req,res)=>{
-//     db.query(`select COUNT(q_id) from ( SELECT q_id FROM query where status = 0) A UNION ALL select p_name FROM (SELECT p_name from query where status = 0) E UNION ALL select description FROM (SELECT description from query where status = 0) F UNION ALL select q_id FROM (SELECT q_id from query where status = 0) G UNION ALL select e_id FROM (SELECT e_id from query where status = 0) H UNION ALL select u_id FROM (SELECT u_id from query where status = 0) I UNION ALL select start_date FROM (SELECT start_date from query where status = 0) J UNION ALL select end_date FROM (SELECT end_date from query where status = 0) K UNION ALL select status FROM (SELECT status from query where status = 0) L UNION ALL select feedback FROM (SELECT feedback from query where status = 0) M;`,function(err,result){
-//         if(err) throw err;
-//         console.log(Object.values(result[0]))
-//         if((result[5])==undefined){
-//             res.render("remainingquery",{ remainquery: { querypname: 0, querydesc: 0, queryqid: 0, queryeid: 0, queryuid: 0, querystart: 0, queryend: 0, querystatus: 0, queryfeed: 0 }});
-//         }
-        
-//         else{
-//             var increment = Object.values(result[0])-1;
-//             for(var i=0; i<2; i++){
-//             res.render("remainingquery",{ remainquery: { querypname: Object.values(result[1]), querydesc: Object.values(result[2+increment+increment*i]), queryqid: Object.values(result[3+increment*2+increment*i]), queryeid: Object.values(result[4+increment*3+increment*i]), queryuid: Object.values(result[5+increment*4+increment*i]), querystart: Object.values(result[6+increment*5+increment*i]), queryend: Object.values(result[7+increment*6+increment*i]), querystatus: Object.values(result[8+increment*7+increment*i]), queryfeed: Object.values(result[9+increment*8+increment*i]) }});    
-//             }
-//         }
-//     })
-// })
 
 app.get('/querysolve',(req,res)=>{
     //show in dropdown
@@ -443,7 +388,6 @@ app.get('/afterquerysolve',(req,res)=>{
                 to: `${sendingemail}`,
                 subject: 'FeedBack',
                 text: `Please provide your valuable feedback on this link: 'http://localhost:3000/userfeedback?q_id=${q_id.split(',')[0]}`,
-                // http://localhost:3000/userfeedbackrun?rating=Excellent&q_id=5
             }; 
             transport.sendMail(mailOptions, function(error, info){
                 if (error) {
@@ -458,12 +402,9 @@ app.get('/afterquerysolve',(req,res)=>{
 })
 
 app.get('/userfeedback',function(req,res){
-    // const data8 = fs.readFileSync('userfeedback.ejs')
-    // const q_iddata = `${req.query.q_id}`;
     const q_iddata=req.query.q_id.split(',')[0]
     console.log(q_iddata);
     res.render("userfeedback",{ queryid : q_iddata })
-    // res.send(data8.toString())
 })
 
 app.use('/userfeedbackrun',function(req,res){
