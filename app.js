@@ -350,7 +350,11 @@ app.use('/afteradminpanel', (req,res) => {
             }); 
         })
     
+<<<<<<< HEAD
         res.redirect('/adminpanel')
+=======
+        res.redirect('/adminpanel')  
+>>>>>>> 5f86f1e (all done)
 })
 // app.use('/afterafteradminpanel',function(req,res){
 //     db.query('select query.q_id, p_name, description, e_id from query where query.status = 0 and e_id is not NULL and query.resolution is not NULL', function(err,result){
