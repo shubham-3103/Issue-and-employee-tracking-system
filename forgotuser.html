@@ -72,27 +72,26 @@
                     </div>
 
                     <div class="signin-form">
-                        <h2 class="form-title">Sign In</h2>
-                        <form method="get" class="register-form" id="login-form" action="/usersigninrun">
+                        <h2 class="form-title">Email ID</h2>
+                        <form method="get" class="register-form" id="login-form" action="/forgotuserlogin">
                             <div class="form-group">
                                 <label for="your_name"><i class="zmdi zmdi-account material-icons-name"></i></label>
-                                <input type="text" name="your_name" id="your_name" placeholder="Email Id" required />
-                            </div>
-                            <div class="form-group">
-                                <label for="your_pass"><i class="zmdi zmdi-lock"></i></label>
-                                <input type="password" name="your_pass" id="your_pass" placeholder="Password" />
+                                <input type="text" name="your_name" id="you_rname" placeholder="Email Id" required />
                             </div>
                             
                             <div class="form-group form-button">
-                                <input type="submit" name="signin" id="signin" class="form-submit" value="Log in"/>
-                                <a href="./usersignup" class="text-right"><div class="change">Not Registered<br><b class="text-primary">Create Account</b></div>
-                                <a href="./forgotuser.html" class="text-left"><div class="change">Forgot Password<br><b class="text-primary">Click Here</b></div>
-                            </div>
-                        </form>    
+                                <input type="submit" name="forgetemail" id="signin" class="form-submit" value="Submit" onclick="FbotonOn()" />
                     </div>
+                    <p id="texto"></p>
                 </div>
             </div>
         </section>
 </body>
 <!-- <script src="vendor/jquery/jquery.min.js"></script> -->
 </html>
+<script type="text/javascript">
+    function FbotonOn() { 
+        if(document.getElementById('signin'))
+            document.getElementById('texto').innerHTML = "<b> Your password had been sent to your email Id <br> You will be redirected in 3 Seconds <b>";
+    }
+</script>

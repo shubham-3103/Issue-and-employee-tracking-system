@@ -316,11 +316,7 @@ app.use('/afteradminpanel', (req,res) => {
             }); 
         })
     
-<<<<<<< HEAD
         res.redirect('/adminpanel')
-=======
-        res.redirect('/adminpanel')  
->>>>>>> 5f86f1e (all done)
 })
 app.use('/remainingquery',(req,res)=>{
     db.query(`select p_name, description, q_id, e_id, u_id,feedback,resolution from query where status = 0`,function(err,result){
@@ -414,6 +410,78 @@ app.use('/userfeedbackrun',function(req,res){
             console.log('query updated')
     })
     res.redirect('/');
+})
+
+app.use('/seefeedback',function(req,res){
+    
+})
+app.use('/forgotuserlogin',function(req,res){
+    var forgetemail = req.query.your_name;
+    db.query(`select password from userlogin where login_id = '${forgetemail}'`,function(err,result){
+        if (err) throw err;
+        var pass = (Object.values(JSON.parse(JSON.stringify(result)))[0].password)
+
+        var transport = nodemailer.createTransport({
+            host: "smtp.gmail.com",
+            port: 465,
+            auth: {
+              user: "shubhamsharma31031991@gmail.com",
+              pass: "kiigkwmyusdntexs",
+            }
+          });
+        var mailOptions = {
+            from: 'shubhamsharma31031991@gmail.com',
+            to: `${forgetemail}`,
+            subject: 'Forgot Password',
+            text: `Your Forgotten Password is: ${pass}`,
+        }; 
+        transport.sendMail(mailOptions, function(error, info){
+            if (error) {
+              console.log(error);
+            } else {
+              console.log('Email sent: ' + info.response);
+            }
+        }); 
+    })
+    
+    setTimeout(() => {
+        res.redirect('/usersignin')
+    }, 3000);
+
+})
+app.use('/forgotadminlogin',function(req,res){
+    var forgetemail = req.query.admin_email;
+    db.query(`select pass from admin where admin_id = '${forgetemail}'`,function(err,result){
+        if (err) throw err;
+        var pass = (Object.values(JSON.parse(JSON.stringify(result)))[0].pass)
+
+        var transport = nodemailer.createTransport({
+            host: "smtp.gmail.com",
+            port: 465,
+            auth: {
+              user: "shubhamsharma31031991@gmail.com",
+              pass: "kiigkwmyusdntexs",
+            }
+          });
+        var mailOptions = {
+            from: 'shubhamsharma31031991@gmail.com',
+            to: `${forgetemail}`,
+            subject: 'Forgot Password',
+            text: `Your Forgotten Password is: ${pass}`,
+        }; 
+        transport.sendMail(mailOptions, function(error, info){
+            if (error) {
+              console.log(error);
+            } else {
+              console.log('Email sent: ' + info.response);
+            }
+        }); 
+    })
+    
+    setTimeout(() => {
+        res.redirect('/adminsignin')
+    }, 3000);
+
 })
 
 app.use('/logout', (req,res) => {
