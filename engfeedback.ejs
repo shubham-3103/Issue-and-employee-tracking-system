@@ -59,11 +59,11 @@
                 </div>
                 <div class="navbar-nav w-100">
                     <a href="/adminpanel" class="nav-item nav-link"><i class="fa fa-tachometer-alt me-2"></i>Dashboard</a>
-                    <a href="/createadmin.html" class="nav-item nav-link active"><i class="fa fa-th me-2"></i>Add Admin</a>
+                    <a href="/createadmin.html" class="nav-item nav-link"><i class="fa fa-th me-2"></i>Add Admin</a>
                     <a href="/engineer.html" class="nav-item nav-link"><i class="fa fa-keyboard me-2"></i>Add Engineer</a>               
                     <a href="/assignengineer" class="nav-item nav-link"><i class="fa fa-keyboard me-2"></i>Assign Engineer</a>               
                     <a href="/querysolve" class="nav-item nav-link"><i class="fa fa-keyboard me-2"></i>Query To Solve</a>               
-                    <a href="/seefeedback" class="nav-item nav-link"><i class="fa fa-keyboard me-2"></i>All Queries</a>
+                    <a href="/seefeedback" class="nav-item nav-link active"><i class="fa fa-keyboard me-2"></i>All Queries</a>               
                 </div>
             </nav>
         </div>
@@ -80,30 +80,47 @@
                 <a href="#" class="sidebar-toggler flex-shrink-0">
                     <i class="fa fa-bars"></i>
                 </a>
-                
             </nav>
             <!-- Navbar End -->
 
 
             <!-- Blank Start -->
             <div class="container-fluid pt-4 px-4">
-                <div class="row vh-100 bg-secondary rounded align-items-center justify-content-center mx-0">
-                    <div class="col-md-6 text-center">
-                        <form action="/createadmin" method="get" class="input_admin">
-                            <div class="d-flex align-items-center justify-content-between mb-4">
-                                <h6 class="mb-0">Add Admin Email Id</h6>
-                            </div>
-                            <input class="form-control bg-dark border-0" type="text" name="adminname" id="adminname" placeholder="Email Id" required><br>
+                
+                        <table border="1" class="table text-start align-middle table-bordered table-hover mb-0">
+                            <tr class="text-danger" style="border-color: #6C7293">
+                                <th>S.No.</th>
+                                <th>Product Name</th>
+                                <th>Description</th>
+                                <th>Start Date</th>
+                                <th>End Date</th>
+                                <th>Status</th>
+                                <th>Feedback</th>
+                                <th>Resolution</th>
+                            </tr>
                             
-                            <div class="d-flex align-items-center justify-content-between mb-4">
-                                <h6 class="mb-0">Add Admin Password</h6>
-                            </div>
-                            <input class="form-control bg-dark border-0" type="password" id="admin_pass" name="admin_pass"  placeholder="Password" required><br>
-                    
-                            <input type="submit" class="btn btn-primary ms-2" value="Submit">
-                        </form>
-                    </div>
-                </div>
+                            <%
+                            if(userData.length!=0){
+                            var i=1;
+                            userData.forEach(function(data){
+                            %>
+                            <tr class="text-white" style="border-color:#6C7293;">
+                                <td><%=i; %></td>
+                                <td><%= data.p_name %></td>
+                                <td><%= data.description %></td>
+                                <td style="width: 10%; "><%= data.start_date %></td>
+                                <td style="width: 10% ;"><%= data.end_date %></td>
+                                <td><%= data.status %></td>
+                                <td><%= data.feedback %></td>
+                                <td><%= data.resolution %></td>
+                            </tr>
+                            <%  i++; }) %>
+                            <% } else{ %>
+                                <tr>
+                                    <td colspan="7">No Data Found</td>
+                                </tr>
+                            <% } %>
+                        </table>
             </div>
             <!-- Blank End -->
 
@@ -113,10 +130,9 @@
                 <div class="bg-secondary rounded-top p-4">
                     <div class="row">
                         <div class="col-12 col-sm-6 text-center text-sm-start">
-                            &copy; <a href="index.html">Globe Computers and Solutions</a>, All Right Reserved. 
+                            &copy; <a href="index.html">Globe Computers and Solutions </a>, All Right Reserved. 
                         </div>
                         <div class="col-12 col-sm-6 text-center text-sm-end">
-                            <!--/*** This template is free as long as you keep the footer author’s credit link/attribution link/backlink. If you'd like to use the template without the footer author’s credit link/attribution link/backlink, you can purchase the Credit Removal License from "https://htmlcodex.com/credit-removal". Thank you for your support. ***/-->
                             Designed By Shubham Sharma
                         </div>
                     </div>
@@ -125,7 +141,10 @@
             <!-- Footer End -->
         </div>
         <!-- Content End -->
-    </div>
+
+
+        <!-- Back to Top -->
+        
 
     <!-- JavaScript Libraries -->
     <script src="https://code.jquery.com/jquery-3.4.1.min.js"></script>

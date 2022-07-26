@@ -413,7 +413,10 @@ app.use('/userfeedbackrun',function(req,res){
 })
 
 app.use('/seefeedback',function(req,res){
-    
+    db.query(`select query.p_name, query.description, query.start_date ,query.end_date,query.status,query.feedback,query.resolution from query`,function(err,result){
+        if (err) throw err;
+        res.render('engfeedback',{userData: result})
+    })
 })
 app.use('/forgotuserlogin',function(req,res){
     var forgetemail = req.query.your_name;
@@ -446,7 +449,7 @@ app.use('/forgotuserlogin',function(req,res){
     
     setTimeout(() => {
         res.redirect('/usersignin')
-    }, 3000);
+    }, 3500);
 
 })
 app.use('/forgotadminlogin',function(req,res){
@@ -480,7 +483,41 @@ app.use('/forgotadminlogin',function(req,res){
     
     setTimeout(() => {
         res.redirect('/adminsignin')
-    }, 3000);
+    }, 3500);
+
+})
+app.use('/forgotengineerlogin',function(req,res){
+    var forgetemail = req.query.your_name;
+    db.query(`select password from engineer where email = '${forgetemail}'`,function(err,result){
+        if (err) throw err;
+        var pass = (Object.values(JSON.parse(JSON.stringify(result)))[0].password)
+
+        var transport = nodemailer.createTransport({
+            host: "smtp.gmail.com",
+            port: 465,
+            auth: {
+              user: "shubhamsharma31031991@gmail.com",
+              pass: "kiigkwmyusdntexs",
+            }
+          });
+        var mailOptions = {
+            from: 'shubhamsharma31031991@gmail.com',
+            to: `${forgetemail}`,
+            subject: 'Forgot Password',
+            text: `Your Forgotten Password is: ${pass}`,
+        }; 
+        transport.sendMail(mailOptions, function(error, info){
+            if (error) {
+              console.log(error);
+            } else {
+              console.log('Email sent: ' + info.response);
+            }
+        }); 
+    })
+    
+    setTimeout(() => {
+        res.redirect('/engineersignin')
+    }, 3500);
 
 })
 
