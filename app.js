@@ -49,7 +49,7 @@ app.get('/usersignuprun',(req,res)=>{
     req.session.email=usersignup;
     db.query("INSERT INTO userlogin(login_id, password) VALUES ?", [values3], function(err,result){
         if (err){ 
-            res.send('Email already exist, Please go back')
+            res.send(fs.readFileSync('useralreadyexist.html').toString())
         }
         
         else{
@@ -75,7 +75,7 @@ app.get('/usersigninrun',(req,res)=>{
             res.redirect('/createquerypage')
         }
         else{
-            res.send('Wrong Email Id or Password')
+            res.send(fs.readFileSync('usernotfound.html').toString());
         }
     })
     
@@ -96,7 +96,7 @@ app.get('/engineersigninrun',(req,res)=>{
             res.redirect('/engineerpanel')
         }
         else{
-            res.send('Wrong Email Id or Password')
+            res.send(fs.readFileSync('usernotfound.html').toString());
         }
     })
     
@@ -250,7 +250,7 @@ app.use('/adminpanelrun', (req,res) => {
             req.session.eid=admin_email;
             res.redirect('/adminpanel')
         }else{
-            res.status(404).send('User Not Found');
+            res.send(fs.readFileSync('usernotfound.html').toString());
             return;
         }
     })   
