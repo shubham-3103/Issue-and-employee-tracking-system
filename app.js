@@ -123,7 +123,7 @@ app.get('/afterengineerpanel',function(req,res){
     db.query(`update query set resolution = '${getreso}' where q_id = ${q_id_get}`,function(err,result){
         if(err) throw err
         console.log("Resolution has been updated")
-        res.redirect('/engineersignin')
+        res.redirect('/engineerpanel')
     })
 })
 
@@ -196,7 +196,12 @@ app.get('/engineerdetails',(req,res)=>{
         const q = Object.values(JSON.parse(JSON.stringify(result)));
         q.forEach((v) => detail.push(Object.values(v)));
         console.log(detail[0])
-        res.render("engineerdetails",{engdet:detail[0]})
+
+        if(detail[0]==undefined){
+            res.render("engineerdetails",{engdet:0})
+        }else{
+            res.render("engineerdetails",{engdet:detail[0]})
+        } 
     })
 })
 
@@ -382,8 +387,11 @@ app.get('/afterquerysolve',(req,res)=>{
             var mailOptions = {
                 from: 'shubhamsharma31031991@gmail.com',
                 to: `${sendingemail}`,
-                subject: 'FeedBack',
-                text: `Please provide your valuable feedback on this link: 'http://localhost:3000/userfeedback?q_id=${q_id.split(',')[0]}`,
+                subject: 'You know us better than anyone else. What do you think?',
+                text: `Thank you for your recent purchase of Service! We’d love to hear about your experience with us; you can leave us a review at 'http://localhost:3000/userfeedback?q_id=${q_id.split(',')[0]} 
+                
+                Your feedback is valuable to us. Thank you for your time!
+                `
             }; 
             transport.sendMail(mailOptions, function(error, info){
                 if (error) {
@@ -413,7 +421,7 @@ app.use('/userfeedbackrun',function(req,res){
 })
 
 app.use('/seefeedback',function(req,res){
-    db.query(`select query.p_name, query.description, query.start_date ,query.end_date,query.status,query.feedback,query.resolution from query`,function(err,result){
+    db.query(`select query.p_name, query.description, query.start_date ,query.end_date,query.status, (SELECT engineer.name from engineer where engineer.e_id = query.e_id) as engname, query.feedback,query.resolution from query;`,function(err,result){
         if (err) throw err;
         res.render('engfeedback',{userData: result})
     })

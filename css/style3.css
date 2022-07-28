@@ -1,14 +1,26 @@
 body {
-  font-family: 'Roboto', sans-serif;
+  font-family: 'Open Sans', 'HelveticaNeue', 'Helvetica Neue', Helvetica, Arial, sans-serif;
   color: #000000;
-  background-color: #ffffff;
+  background-color: #ececec;
+  font-size: 16px;
+  line-height: 24.75px;
+  font-stretch: 100%;
 }
 .all{
-  background-color: #ff4f5a;
+  background-color: #464646;
   /* padding: ; */
   border-radius: 6%;
   padding-top: 10%;
   padding-bottom: 10%;
+  color: white;
+}
+.all:hover{
+  background-color: #ff834e;
+  /* padding: ; */
+  border-radius: 6%;
+  padding-top: 10%;
+  padding-bottom: 10%;
+  color: white;
 }
 .layout_padding {
   padding: 75px 0;
@@ -65,7 +77,7 @@ marquee img{
   height: 7px;
   -webkit-transform: translateX(-50%);
           transform: translateX(-50%);
-  background-color: #ff4f5a;
+  background-color: #ff834e;
   border-radius: 15px;
 }
 
@@ -136,7 +148,7 @@ marquee img{
   height: 4px;
   -webkit-transform: translateX(-50%);
           transform: translateX(-50%);
-  background-color: #ff4f5a;
+  background-color:  #ff834e;
   border-radius: 5px;
 }
 
@@ -230,7 +242,7 @@ a:focus {
 }
 
 .slider_section .detail-box h1 span {
-  color: #ff4f5a;
+  color:  #ff834e;
 }
 
 .slider_section .slider_nav-box {
@@ -290,6 +302,10 @@ a:focus {
   text-align: center;
 }
 
+.about_section p{
+  text-align: left;
+}
+
 .about_section .img-box img {
   width: 450px;
   border: solid black;
@@ -345,7 +361,7 @@ a:focus {
 }
 
 .service_section .detail-box {
-  height: 118px;
+  height: 150px;
   margin-top: 10px;
 }
 
@@ -354,11 +370,11 @@ a:focus {
 }
 
 .service_section .detail-box .btn-box a {
-  color: #ff4f5a;
+  color: #6ec9fe;
 }
 
 .service_section .detail-box .btn-box hr {
-  background-color: #ff4f5a;
+  background-color: #6ec9fe;
 }
 
 .service_section::before {
@@ -375,7 +391,7 @@ a:focus {
 }
 
 .work_section {
-  background-color: #ff4f5a;
+  background-color: rgb(86, 86, 86);
 }
 
 .work_section .custom_heading-container h3 {
@@ -383,7 +399,7 @@ a:focus {
 }
 
 .work_section .custom_heading-container h3::before {
-  background-color: #ffffff;
+  background-color: #ff834e;
 }
 
 .work_section .work_container {
@@ -543,17 +559,17 @@ a:focus {
 }
 
 .contact_section button {
-  background-color: #ff4f5a;
+  background-color: #6ec9fe;
   padding: 12px 55px;
   outline: none;
   border: none;
-  border: 1px solid #ff4f5a;
+  border: 1px solid #6ec9fe;
   color: #fff;
   margin-top: 25px;
 }
 
 .contact_section button:hover {
-  color: #ff4f5a;
+  color: #6ec9fe;
   background-color: transparent;
 }
 
@@ -603,11 +619,11 @@ a:focus {
 }
 
 .client_section .client_container .client_id .name h6 {
-  color: #ff4f5a;
+  color: #6ec9fe;
 }
 
 .info_section {
-  background-color: #ff4f5a;
+  background-color: rgb(86, 86, 86);
   color: #ffffff;
 }
 
