@@ -326,21 +326,22 @@ app.use('/afteradminpanel', (req,res) => {
 app.use('/remainingquery',(req,res)=>{
     db.query(`select p_name, description, q_id, e_id, u_id,feedback,resolution from query where status = 0`,function(err,result){
         if(err) throw err;
-        var rem_info = [];
-        const q = Object.values(JSON.parse(JSON.stringify(result)));
-        q.forEach((v) => rem_info.push(Object.values(v)));
-        if(rem_info[0]==undefined){
-            res.redirect('/adminpanel')
-        }else{
-        console.log(rem_info[0].length)
-        for(var i = 0; i<rem_info.length; i++){
-            for( var j = 0; j<rem_info[0].length; j++){
-                if(rem_info[i][j] == undefined){
-                    rem_info[i][j] = 'Null';
-                }
-            }
-        }
-        res.render("remainingquery",{remain: rem_info });  }
+        // var rem_info = [];
+        // const q = Object.values(JSON.parse(JSON.stringify(result)));
+        // q.forEach((v) => rem_info.push(Object.values(v)));
+        // if(rem_info[0]==undefined){
+        //     res.redirect('/adminpanel')
+        // }else{
+        // console.log(rem_info[0].length)
+        // for(var i = 0; i<rem_info.length; i++){
+        //     for( var j = 0; j<rem_info[0].length; j++){
+        //         if(rem_info[i][j] == undefined){
+        //             rem_info[i][j] = 'Null';
+        //         }
+        //     }
+        // }
+        // res.render("remainingquery",{remain: rem_info });  }
+        res.render("remainingquery",{remain: result });
     })
 })
 

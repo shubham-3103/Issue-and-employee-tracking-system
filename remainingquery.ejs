@@ -81,48 +81,44 @@
 
             <!-- Blank Start -->
             <div class="container-fluid pt-4 px-4">
-                <div class="row vh-100 bg-secondary rounded align-items-center justify-content-center mx-0">
-                    <div class="col-md-6 text-center">
-                        <form action="/afteradminpanel" method="get">
-                            <div class="d-flex align-items-center justify-content-between mb-4">
-                                <h6 class="mb-0">Remaining Queries</h6>
-                            </div>
-                            <div class="d-flex align-items-center justify-content-between mb-4">
-                                <h6 class="mb-0">Product Name, Description, Query Id, Engineer Id, User Id, Feedback, Resolution</h6>
-                            </div>
-                            <select name="remquery" id="remquery" class="droppanel">
-                                <% for (var i =0; i < ((Object.values(remain).length)) ;  i++ ) { %>
-                                    <option>
-                                    <br/>  <%- remain[i] %> 
-                                    <% } %>
-                                    </option>
-                            </select><br>
-                        </form>
-                    </div>
-                </div>
+                
+                    <table border="1" class="table text-start align-middle table-bordered table-hover mb-0">
+                        <tr class="text-danger" style="border-color: #6C7293; height: 10%;" >
+                            <th >S.No.</th>
+                            <th>Product Name</th>
+                            <th>Description</th>
+                            <th>Query ID</th>
+                            <th>Engineer ID</th>
+                            <th>User ID</th>
+                            <th>Feedback</th>
+                            <th>Resolution</th>
+                        </tr>
+                        
+                        <%
+                        if(remain.length!=0){
+                        var i=1;
+                        remain.forEach(function(data){
+                        %>
+                        <tr class="text-white" style="border-color:#6C7293; text-align: center;">
+                            <td><%=i; %></td>
+                            <td><%= data.p_name %></td>
+                            <td><%= data.description %></td>
+                            <td style="width: 5% ;"><%= data.q_id %></td>
+                            <td style="width: 5% ;"><%= data.e_id %></td>
+                            <td style="width: 5% ;"><%= data.u_id %></td>
+                            <td><%= data.feedback %></td>
+                            <td><%= data.resolution %></td>
+                        </tr>
+                        <%  i++; }) %>
+                        <% } else{ %>
+                            <tr>
+                                <td colspan="7">No Data Found</td>
+                            </tr>
+                        <% } %>
+                    </table>
+                
             </div>
-            <!-- Blank End -->
-
-
-            <!-- Footer Start -->
-            <div class="container-fluid pt-4 px-4">
-                <div class="bg-secondary rounded-top p-4">
-                    <div class="row">
-                        <div class="col-12 col-sm-6 text-center text-sm-start">
-                            &copy; <a href="index.html">Globe Computers and Solutions </a>, All Right Reserved. 
-                        </div>
-                        <div class="col-12 col-sm-6 text-center text-sm-end">
-                            Designed By Shubham Sharma
-                        </div>
-                    </div>
-                </div>
-            </div>
-            <!-- Footer End -->
-        </div>
-        <!-- Content End -->
-
-
-        <!-- Back to Top -->
+        </div></div>
         
 
     <!-- JavaScript Libraries -->
