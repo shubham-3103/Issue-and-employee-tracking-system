@@ -236,9 +236,10 @@ a:focus {
 }
 
 .slider_section .detail-box h1 {
-  font-weight: bold;
-  font-size: 4rem;
+  font-weight: 400;
+  font-size: 34px;
   color: #1a2e35;
+  line-height: 37.4px;
 }
 
 .slider_section .detail-box h1 span {
@@ -313,7 +314,7 @@ a:focus {
 }
 
 .service_section {
-  text-align: center;
+  text-align: left;
   position: relative;
 }
 

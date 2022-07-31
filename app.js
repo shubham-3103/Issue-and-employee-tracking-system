@@ -7,6 +7,7 @@ session = require('express-session')
 const port = 3000;
 const app = express();
 
+
 app.set('view engine', 'ejs');
 const viewPath = path.join(__dirname)
 app.set('views',viewPath)
