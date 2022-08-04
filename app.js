@@ -6,7 +6,7 @@ var nodemailer = require('nodemailer');
 session = require('express-session')
 const port = 3000;
 const app = express();
-
+process.env.NODE_TLS_REJECT_UNAUTHORIZED = '0';
 
 app.set('view engine', 'ejs');
 const viewPath = path.join(__dirname)
@@ -503,15 +503,16 @@ app.use('/forgotengineerlogin',function(req,res){
         var pass = (Object.values(JSON.parse(JSON.stringify(result)))[0].password)
 
         var transport = nodemailer.createTransport({
-            host: "smtp.gmail.com",
+            service: "smtp",
+            host: "103.74.54.192",
             port: 465,
             auth: {
-              user: "shubhamsharma31031991@gmail.com",
-              pass: "kiigkwmyusdntexs",
+              user: "support@globecs.in",
+              pass: "Eiz5n7*01",
             }
           });
         var mailOptions = {
-            from: 'shubhamsharma31031991@gmail.com',
+            from: 'support@globecs.in',
             to: `${forgetemail}`,
             subject: 'Forgot Password',
             text: `Your Forgotten Password is: ${pass}`,
