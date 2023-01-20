@@ -304,7 +304,7 @@ app.use('/afteradminpanel', (req,res) => {
                 port: 465,
                 auth: {
                   user: "shubhamsharma31031991@gmail.com",
-                  pass: "kiigkwmyusdntexs",
+                  pass: "",
                 }
               });
             var mailOptions = {
@@ -382,8 +382,8 @@ app.get('/afterquerysolve',(req,res)=>{
                 host: "smtp.gmail.com",
                 port: 465,
                 auth: {
-                  user: "shubhamsharma31031991@gmail.com",
-                  pass: "kiigkwmyusdntexs",
+                  user: "",
+                  pass: "",
                 }
               });
             var mailOptions = {
@@ -438,8 +438,8 @@ app.use('/forgotuserlogin',function(req,res){
             host: "smtp.gmail.com",
             port: 465,
             auth: {
-              user: "shubhamsharma31031991@gmail.com",
-              pass: "kiigkwmyusdntexs",
+              user: "",
+              pass: "",
             }
           });
         var mailOptions = {
@@ -472,8 +472,8 @@ app.use('/forgotadminlogin',function(req,res){
             host: "smtp.gmail.com",
             port: 465,
             auth: {
-              user: "shubhamsharma31031991@gmail.com",
-              pass: "kiigkwmyusdntexs",
+              user: "",
+              pass: "",
             }
           });
         var mailOptions = {
@@ -508,7 +508,7 @@ app.use('/forgotengineerlogin',function(req,res){
             port: 465,
             auth: {
               user: "support@globecs.in",
-              pass: "Eiz5n7*01",
+              pass: "",
             }
           });
         var mailOptions = {
